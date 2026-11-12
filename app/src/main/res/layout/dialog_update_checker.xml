@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_neon_card"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_refresh"
+            app:tint="@color/neon_cyan" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-black"
+                android:text="مركز تحديثات AdBlock Max"
+                android:textColor="@color/text_primary"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GitHub Releases Auto-Updater"
+                android:textColor="@color/neon_cyan"
+                android:textSize="11sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/pbUpdateChecking"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_marginTop="12dp"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/neon_cyan"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tvUpdateStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:fontFamily="sans-serif-bold"
+        android:textColor="@color/text_primary"
+        android:textSize="13sp" />
+
+    <!-- Changelog box -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_stat_chip"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tvUpdateChangelog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:lineSpacingMultiplier="1.2"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp" />
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Download Progress Bar -->
+    <ProgressBar
+        android:id="@+id/pbUpdateDownloading"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:layout_marginTop="10dp"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="0"
+        android:progressTint="@color/neon_green"
+        android:visibility="gone" />
+
+    <!-- Action Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnUpdateAction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/neon_cyan"
+            android:text="تحميل وتثبيت التحديث الآن ⬇️"
+            android:textColor="@color/bg_dark" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnUpdateSecondary"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:text="مستودع GitHub 🌐"
+                android:textColor="@color/neon_blue"
+                android:textSize="12sp"
+                app:strokeColor="@color/neon_blue" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnUpdateClose"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="إغلاق"
+                android:textColor="@color/text_secondary"
+                android:textSize="12sp"
+                app:strokeColor="@color/card_stroke" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

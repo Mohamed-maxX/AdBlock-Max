@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_neon_card"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/dialog_custom_dns_title"
+        android:textColor="@color/neon_cyan"
+        android:textSize="18sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="أدخل عناوين خادم الـ DNS الخاص بك. يتم استخدامها مباشرة مع فلترة ومنع تسريب IPv6."
+        android:textColor="@color/text_secondary"
+        android:textSize="13sp" />
+
+    <!-- IPv4 Input -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="@string/dialog_custom_dns_ipv4_hint"
+        android:textColorHint="@color/text_dim"
+        app:boxBackgroundColor="@color/bg_card_elevated"
+        app:boxStrokeColor="@color/neon_cyan"
+        app:hintTextColor="@color/neon_cyan">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etCustomIpv4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:inputType="textUri"
+            android:textColor="@color/text_primary" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- IPv6 Input -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:hint="@string/dialog_custom_dns_ipv6_hint"
+        android:textColorHint="@color/text_dim"
+        app:boxBackgroundColor="@color/bg_card_elevated"
+        app:boxStrokeColor="@color/neon_cyan"
+        app:hintTextColor="@color/neon_cyan">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etCustomIpv6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:inputType="textUri"
+            android:textColor="@color/text_primary" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancelCustom"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dialog_btn_cancel"
+            android:textColor="@color/text_secondary" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSaveCustom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="@color/neon_blue"
+            android:text="@string/dialog_btn_save"
+            android:textColor="@color/text_primary" />
+    </LinearLayout>
+</LinearLayout>

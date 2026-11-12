@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <shortcut
+        android:shortcutId="shortcut_start_protection"
+        android:enabled="true"
+        android:icon="@drawable/ic_shield_protected"
+        android:shortcutShortLabel="@string/shortcut_start_short"
+        android:shortcutLongLabel="@string/shortcut_start_long">
+        <intent
+            android:action="com.max.adblock.ACTION_SHORTCUT_START"
+            android:targetPackage="com.max.adblock"
+            android:targetClass="com.max.adblock.MainActivity" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="shortcut_gaming_mode"
+        android:enabled="true"
+        android:icon="@drawable/ic_ping"
+        android:shortcutShortLabel="@string/shortcut_gaming_short"
+        android:shortcutLongLabel="@string/shortcut_gaming_long">
+        <intent
+            android:action="com.max.adblock.ACTION_SHORTCUT_GAMING"
+            android:targetPackage="com.max.adblock"
+            android:targetClass="com.max.adblock.MainActivity" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="shortcut_family_mode"
+        android:enabled="true"
+        android:icon="@drawable/ic_shield_protected"
+        android:shortcutShortLabel="@string/shortcut_family_short"
+        android:shortcutLongLabel="@string/shortcut_family_long">
+        <intent
+            android:action="com.max.adblock.ACTION_SHORTCUT_FAMILY"
+            android:targetPackage="com.max.adblock"
+            android:targetClass="com.max.adblock.MainActivity" />
+    </shortcut>
+
+</shortcuts>

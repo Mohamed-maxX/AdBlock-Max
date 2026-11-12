@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AdBlock Max</string>
+    <string name="app_tagline">درع الحماية السيبراني لحظر الإعلانات والمتتبعات</string>
+
+    <!-- VPN Status -->
+    <string name="status_protected">الحماية نشطة - الدرع فعال</string>
+    <string name="status_unprotected">الحماية متوقفة</string>
+    <string name="status_connecting">جاري تفعيل درع الحماية...</string>
+    <string name="btn_start_protection">تفعيل الحماية</string>
+    <string name="btn_stop_protection">إيقاف الحماية</string>
+
+    <!-- Stats & Live Monitor -->
+    <string name="stat_session_timer">مدة الجلسة</string>
+    <string name="stat_ping">زمن الاستجابة</string>
+    <string name="stat_network">نوع الشبكة</string>
+    <string name="initial_timer">00:00:00</string>
+    <string name="initial_ping">-- ms</string>
+    <string name="net_wifi">Wi-Fi متصل</string>
+    <string name="net_cellular">بيانات الهاتف</string>
+    <string name="net_disconnected">غير متصل</string>
+
+    <!-- Modes Title -->
+    <string name="section_modes_title">أوضاع الحماية السيبرانية</string>
+
+    <!-- Protection Modes -->
+    <string name="mode_standard_title">الوضع الأساسي (AdGuard)</string>
+    <string name="mode_standard_desc">حظر الإعلانات، المتتبعات، والنوافذ المنبثقة المزعجة</string>
+
+    <string name="mode_security_title">وضع الأمان الفائق (Quad9)</string>
+    <string name="mode_security_desc">حماية مشددة ضد النطاقات الخبيثة والتصيد والبرمجيات الضارة</string>
+
+    <string name="mode_family_title">الوضع العائلي (Family Shield)</string>
+    <string name="mode_family_desc">حظر الإعلانات والمواقع الإباحية وتفعيل محركات البحث الآمنة</string>
+
+    <string name="mode_gaming_title">وضع الألعاب السريع (Low-Latency)</string>
+    <string name="mode_gaming_desc">أقل بنج (Ping) ممكن مع أسرع خوادم للاستجابة اللحظية</string>
+
+    <string name="mode_custom_title">خادم مخصص (Custom DNS)</string>
+    <string name="mode_custom_desc">تحديد عناوين IPv4 و IPv6 خاصة بحسب رغبتك</string>
+
+    <!-- Quick Tools -->
+    <string name="section_tools_title">الأدوات السريعة</string>
+    <string name="tool_test_title">فحص كفاءة الحظر</string>
+    <string name="tool_test_desc">فحص تجريبي للاتصال بنطاقات الإعلانات للتأكد من حظرها 100%</string>
+    <string name="tool_flush_title">تنظيف كاش الشبكة</string>
+    <string name="tool_flush_desc">إعادة تهيئة مخزن DNS وتصفية مسارات الاتصال</string>
+    <string name="tool_private_dns_title">إعدادات Private DNS</string>
+    <string name="tool_private_dns_desc">نسخ عنوان DoT المشفر وفتح إعدادات النظام</string>
+
+    <!-- Notifications -->
+    <string name="notif_channel_name">حالة حماية AdBlock Max</string>
+    <string name="notif_channel_desc">إشعار مستمر يوضح حالة درع الحظر وخيارات الإيقاف السريع</string>
+    <string name="notif_title_active">درع AdBlock Max نشط ومحمي</string>
+    <string name="notif_content_active">حظر تسريب الإعلانات IPv4 و IPv6 مفعل بنجاح</string>
+    <string name="notif_action_pause">إيقاف مؤقت 5 دقائق</string>
+    <string name="notif_action_stop">إيقاف الحماية</string>
+    <string name="notif_paused_title">تم إيقاف الحظر مؤقتاً</string>
+    <string name="notif_paused_desc">سيتم إعادة تفعيل الدرع تلقائياً بعد 5 دقائق</string>
+
+    <!-- Dialogs & Prompts -->
+    <string name="dialog_custom_dns_title">إعداد خادم DNS مخصص</string>
+    <string name="dialog_custom_dns_ipv4_hint">عنوان IPv4 الأساسي (مثال: 94.140.14.14)</string>
+    <string name="dialog_custom_dns_ipv6_hint">عنوان IPv6 (اختياري، لمنع تسريب IPv6)</string>
+    <string name="dialog_btn_save">حفظ وتطبيق</string>
+    <string name="dialog_btn_cancel">إلغاء</string>
+    <string name="dialog_test_running">جاري فحص نطاقات التتبع والإعلانات...</string>
+    <string name="dialog_test_blocked_title">درع الحماية فعال 100%!</string>
+    <string name="dialog_test_blocked_msg">تم اعتراض استعلام نطاق الإعلانات بنجاح وتصفيته إلى (0.0.0.0 / NXDOMAIN). جهازك محمي بالكامل من الإعلانات.</string>
+    <string name="dialog_test_unblocked_title">تنبيه: الحماية غير مفعلة</string>
+    <string name="dialog_test_unblocked_msg">نطاق الإعلانات قام بالاستجابة بشكل طبيعي. يرجى التأكد من تشغيل زر الدرع في الشاشة الرئيسية.</string>
+    <string name="dialog_btn_ok">حسناً</string>
+
+    <!-- Toasts -->
+    <string name="toast_vpn_permission_required">يلزم منح إذن الـ VPN المحلي لتفعيل درع الحظر</string>
+    <string name="toast_dns_flushed">تم تنظيف كاش الشبكة وإعادة تهيئة المسارات بنجاح ⚡</string>
+    <string name="toast_private_dns_copied">تم نسخ العنوان: %s. يمكنك لصقه في حقل Private DNS في إعدادات النظام.</string>
+    <string name="toast_pause_activated">تم إيقاف الحماية مؤقتاً لمدة 5 دقائق</string>
+
+    <!-- Phase 2: Quick Settings Tile -->
+    <string name="tile_label">درع AdBlock</string>
+    <string name="tile_active">الحماية نشطة</string>
+    <string name="tile_inactive">الحماية متوقفة</string>
+
+    <!-- Phase 2: Home Screen Widget -->
+    <string name="widget_name">ودجت AdBlock Max</string>
+    <string name="widget_tap_to_toggle">اضغط للتبديل</string>
+
+    <!-- Phase 2: App Icon Shortcuts -->
+    <string name="shortcut_start_short">تفعيل الحظر</string>
+    <string name="shortcut_start_long">تفعيل درع حظر الإعلانات فوراً</string>
+    <string name="shortcut_gaming_short">وضع الألعاب</string>
+    <string name="shortcut_gaming_long">تفعيل سيرفر الألعاب المنخفض</string>
+    <string name="shortcut_family_short">الوضع العائلي</string>
+    <string name="shortcut_family_long">تفعيل حظر المواقع الإباحية والعائلية</string>
+
+    <!-- Phase 2: Battery Whitelist -->
+    <string name="battery_whitelist_title">استثناء توفير البطارية (البقاء بالخلفية)</string>
+    <string name="battery_status_optimized">يعمل بالخلفية بدون قيود ✅</string>
+    <string name="battery_status_restricted">مقيد بتوفير البطارية (اضغط للاستثناء) ⚠️</string>
+    <string name="battery_dialog_msg">لضمان استمرار حظر الإعلانات دون انقطاع على هواتف Xiaomi و Oppo و Samsung، يرجى استثناء التطبيق من موفر البطارية.</string>
+
+    <!-- Phase 2: Automation & Profiles -->
+    <string name="section_automation_title">الأتمتة الذكية والبروفايلات</string>
+    <string name="profiles_title">البروفايلات السريعة بضغطة زر</string>
+    <string name="profile_gamer_title">🎮 بروفايل الجيمر</string>
+    <string name="profile_gamer_desc">Cloudflare + أقل Ping + Auto Failover</string>
+    <string name="profile_focus_title">💼 بروفايل التركيز والشغل</string>
+    <string name="profile_focus_desc">Quad9 + مفتاح الطوارئ Kill Switch</string>
+    <string name="profile_saver_title">⚡ بروفايل توفير الباقة</string>
+    <string name="profile_saver_desc">AdGuard + قفل الشاشة الذكي + MTU</string>
+
+    <string name="auto_boot_title">تشغيل تلقائي عند فتح الهاتف (Boot)</string>
+    <string name="auto_boot_desc">تفعيل درع الحظر ذاتياً فور إعادة تشغيل الجهاز</string>
+
+    <string name="auto_wifi_title">تشغيل تلقائي على شبكات Wi-Fi</string>
+    <string name="auto_wifi_desc">تفعيل الدرع فور الاتصال بأي شبكة واي فاي</string>
+
+    <string name="auto_cellular_title">تشغيل تلقائي على باقة الهاتف</string>
+    <string name="auto_cellular_desc">حماية وتوفير الميجابايتس فور تشغيل بيانات الهاتف</string>
+
+    <string name="screen_off_title">قفل الشاشة الذكي (Screen-Off Lockdown)</string>
+    <string name="screen_off_desc">تعليق استعلامات الخلفية عند إغلاق الشاشة لتوفير الطاقة</string>
+
+    <string name="auto_failover_title">التبديل التلقائي لأسرع سيرفر (Auto-Failover)</string>
+    <string name="auto_failover_desc">الانتقال التلقائي لأسرع خادم بديل فور ارتفاع الـ Ping أو انقطاعه</string>
+
+    <string name="kill_switch_title">مفتاح الطوارئ (Kill Switch)</string>
+    <string name="kill_switch_desc">عزل تام ومنع تسرب أي حزمة بيانات في حال انقطاع الـ VPN</string>
+
+    <string name="sleep_timer_title">مؤقت النوم للإنترنت (Sleep Timer)</string>
+    <string name="sleep_timer_desc">إيقاف الحماية تلقائياً بعد انقضاء الوقت</string>
+    <string name="sleep_timer_off">معطل</string>
+    <string name="sleep_timer_30m">30 دقيقة</string>
+    <string name="sleep_timer_60m">ساعة واحدة</string>
+    <string name="sleep_timer_120m">ساعتان</string>
+
+    <string name="toast_profile_applied">تم تفعيل بروفايل: %s بنجاح ⚡</string>
+    <string name="toast_sleep_timer_set">تم ضبط مؤقت النوم: %s</string>
+    <string name="toast_sleep_timer_disabled">تم إلغاء مؤقت النوم</string>
+
+    <!-- Phase 3: App Manager & Firewall -->
+    <string name="firewall_title">الجدار الناري وإدارة التطبيقات</string>
+    <string name="firewall_search_hint">بحث عن تطبيق أو حزمة...</string>
+    <string name="firewall_filter_all">الكل</string>
+    <string name="firewall_filter_user">تطبيقاتي</string>
+    <string name="firewall_filter_system">النظام</string>
+    <string name="firewall_filter_blocked">المقطوعة (محظورة)</string>
+    <string name="firewall_filter_risk">عالية الخطورة</string>
+
+    <string name="firewall_switch_bypass">استثناء (Bypass)</string>
+    <string name="firewall_switch_block">قطع النت كلياً</string>
+    <string name="firewall_btn_quota">الكوتة اليومية: %s</string>
+    <string name="firewall_quota_unlimited">بلا حدود</string>
+    <string name="firewall_data_used_today">استهلاك اليوم: %s</string>
+    <string name="firewall_trackers_count">%d متتبع إعلاني</string>
+    <string name="firewall_clean_app">خالي من المتتبعات ✅</string>
+    <string name="firewall_dialog_quota_title">تحديد كوتة البيانات اليومية</string>
+    <string name="firewall_dialog_quota_msg">حدد الحد الأقصى للميجابايت اليومية لتطبيق %s. سيتم تقييد اتصاله تلقائياً فور استهلاك الحد لمنع استنزاف الباقة.</string>
+    <string name="firewall_dialog_tracker_title">تحليل المتتبعات واستنزاف البطارية</string>
+
+    <string name="tool_firewall_title">الجدار الناري والتحكم في التطبيقات</string>
+    <string name="tool_firewall_desc">قطع الإنترنت، استثناء البنوك (Split Tunneling)، وتحديد كوتة يومية</string>
+
+    <string name="auto_update_blocker_title">مانع التحديثات الخفية على الباقة</string>
+    <string name="auto_update_blocker_desc">حظر تنزيل تحديثات النظام والتطبيقات في الخلفية أثناء الاتصال بالداتا</string>
+
+    <string name="toast_app_blocked">تم قطع الإنترنت عن تطبيق: %s 🛡️</string>
+    <string name="toast_app_unblocked">تمت استعادة الاتصال لتطبيق: %s</string>
+    <string name="toast_app_bypassed">تم استثناء تطبيق: %s من فلترة الـ VPN</string>
+    <string name="toast_app_unbypassed">تمت إعادة تفعيل الحظر لتطبيق: %s</string>
+    <string name="toast_quota_set">تم تعيين كوتة %1$s إلى %2$s</string>
+    <string name="toast_quota_exceeded">تنبيه: تطبيق %1$s تخطى الكوتة اليومية المحددة (%2$s) وتم تقييده تلقائياً!</string>
+
+    <!-- Phase 4: Live DNS Radar, Blocklists & Analytics -->
+    <string name="radar_title">الرادار الحي والإحصائيات</string>
+    <string name="tab_radar">الرادار الحي</string>
+    <string name="tab_filters">الفلاتر والجغرافيا</string>
+    <string name="tab_analytics">الإحصائيات والحراسة</string>
+    <string name="tab_router">تصدير للراوتر</string>
+
+    <string name="radar_status_streaming">الرادار يرصد حركة مرور الـ DNS اللحظية ⚡</string>
+    <string name="radar_filter_all">الكل</string>
+    <string name="radar_filter_blocked">المحظورة 🔴</string>
+    <string name="radar_filter_allowed">المسموحة 🟢</string>
+    <string name="radar_action_blacklist">حظر النطاق (Blacklist) 🚫</string>
+    <string name="radar_action_whitelist">استثناء النطاق (Whitelist) ✅</string>
+    <string name="radar_action_copy">نسخ اسم النطاق 📋</string>
+
+    <string name="filter_ads_title">فلتر الإعلانات والنوافذ (AdBlock Core)</string>
+    <string name="filter_ads_desc">حظر بنرات الإعلانات والنوافذ المنبثقة التلقائية</string>
+    <string name="filter_trackers_title">فلتر الخصوصية ومنع التعقب (Anti-Tracker)</string>
+    <string name="filter_trackers_desc">حظر سيرفرات التتبع السلوكي وجمع البيانات</string>
+    <string name="filter_crypto_title">فلتر التعدين الخفي (Cryptojacking Shield)</string>
+    <string name="filter_crypto_desc">منع سكريبتات تعدين العملات المشفرة التي تستهلك المعالج</string>
+    <string name="filter_social_title">فلتر التركيز وحظر السوشيال ميديا</string>
+    <string name="filter_social_desc">حظر ريلز وشورتس تيك توك وسناب وقت العمل والتركيز</string>
+    <string name="geo_block_title">الحظر الجغرافي للنطاقات (Geo-IP &amp; TLD)</string>
+    <string name="geo_block_desc">حظر النطاقات المشبوهة (.ru, .cn, .kp, .top, .xyz)</string>
+
+    <string name="spoof_title">توجيه النطاقات وحظر مخصص (Custom Hosts)</string>
+    <string name="spoof_desc">إضافة نطاق معين يدوي وتوجيهه إلى 0.0.0.0 للحظر الفوري</string>
+    <string name="spoof_hint">أدخل النطاق (مثال: reels.facebook.com)</string>
+
+    <string name="analytics_title">لوحة التحليلات والإحصائيات السيبرانية</string>
+    <string name="analytics_blocked_today">المحظور اليوم</string>
+    <string name="analytics_blocked_week">هذا الأسبوع</string>
+    <string name="analytics_blocked_total">إجمالي المحظور</string>
+    <string name="analytics_data_saved">الباقة الموفرة</string>
+
+    <string name="night_watch_title">تقرير الحراسة الليلي (Night Watch)</string>
+    <string name="night_watch_desc">ملخص محاولات التعقب الخفية التي تم رصدها وصدها أثناء نومك (12 ص - 6 ص)</string>
+    <string name="night_watch_status">درع الحراسة الليلي تصدى لـ %d تهديداً أثناء خمول الهاتف 🌙</string>
+
+    <string name="router_export_title">تصدير الفلاتر للراوتر المنزلي (Router DNS)</string>
+    <string name="router_export_desc">توليد ملف حظر إعلانات متوافق مع راوترات TP-Link, Huawei, Keenetic لحماية المنزل كاملاً</string>
+    <string name="router_export_btn">تصدير وحفظ ملف الراوتر 📄</string>
+    <string name="doh_title">حالة تشفير البروتوكول (DoT / DoH)</string>
+    <string name="doh_desc">بروتوكول DNS-over-TLS مشفر بالكامل عبر منفذ 853 بشهادة أمان نشطة</string>
+
+    <string name="toast_blacklisted">تمت إضافة %s إلى قائمة الحظر 🚫</string>
+    <string name="toast_whitelisted">تمت إضافة %s إلى قائمة الاستثناء ✅</string>
+    <string name="tool_radar_title">الرادار الحي والإحصائيات</string>
+    <string name="tool_radar_desc">سجل استعلامات DNS المباشر، الفلاتر المخصصة، وتقرير الحراسة الليلي</string>
+
+    <!-- Phase 5: Network Tools, Router Scanner & Floating Monitor -->
+    <string name="net_tools_title">أدوات فحص الشبكة والراوتر</string>
+    <string name="tab_wifi_intruder">كاشف المتصلين</string>
+    <string name="tab_ports">فاحص المنافذ</string>
+    <string name="tab_speed_ping">السرعة والألعاب</string>
+    <string name="tab_floating">المراقب العائم</string>
+
+    <string name="wifi_scan_btn">فحص أجهزة الراوتر الآن 🔍</string>
+    <string name="wifi_scan_desc">كشف جميع الأجهزة المتصلة معك على نفس الراوتر بدقة مع الـ IP وسرعة الاستجابة</string>
+    <string name="wifi_devices_found">تم كشف %d جهازاً على الشبكة</string>
+    <string name="wifi_device_gateway">بوابة الراوتر (Gateway) 📡</string>
+    <string name="wifi_device_this">هذا الهاتف (المحمي) 📱</string>
+    <string name="wifi_device_connected">جهاز متصل على الراوتر 💻</string>
+
+    <string name="port_scan_btn">فحص المنافذ والثغرات 🛡️</string>
+    <string name="port_scan_desc">فحص المنافذ الشائعة لكشف أي خدمات مكشوفة أو ثغرات محلية</string>
+    <string name="port_open">مفتوح ⚠️</string>
+    <string name="port_closed">آمن ومغلق 🔒</string>
+
+    <string name="captive_portal_title">درع بوابات الواي فاي العامة (Captive Portal)</string>
+    <string name="captive_portal_secure">الشبكة الحالية آمنة ومباشرة ولا تتطلب تسجيل دخول خارجي ✅</string>
+    <string name="captive_portal_detected">تنبيه: تم رصد بوابة تسجيل دخول إجبارية في الكافيه/الفندق ⚠️</string>
+    <string name="captive_portal_action">فتح في بيئة معزولة آمنة 🛡️</string>
+
+    <string name="speed_test_btn">قياس السرعة النقي ⚡</string>
+    <string name="speed_download_label">سرعة التحميل</string>
+    <string name="speed_jitter_label">التذبذب (Jitter)</string>
+    <string name="gaming_ping_title">بنج سيرفرات الألعاب العالمية</string>
+    <string name="region_me">الشرق الأوسط (دبي / الخليج)</string>
+    <string name="region_eu">أوروبا (فرانكفورت / أمستردام)</string>
+    <string name="region_asia">شرق آسيا (سنغافورة)</string>
+    <string name="region_us">أمريكا (نيويورك / فيرجينيا)</string>
+
+    <string name="floating_monitor_title">النافذة العائمة لمراقبة الألعاب (Mini-Monitor)</string>
+    <string name="floating_monitor_desc">نافذة نيون عائمة خفيفة جداً تظهر فوق الشاشة أثناء اللعب لمراقبة الـ Ping والإعلانات المحظورة لحظياً</string>
+    <string name="floating_monitor_switch">تفعيل النافذة العائمة فوق الألعاب</string>
+    <string name="floating_perm_required">يرجى منح إذن الظهور فوق التطبيقات لتشغيل المراقب العائم</string>
+    <string name="toast_port_scan_complete">اكتمل فحص المنافذ: تقرير الأمان مكتمل ✅</string>
+
+    <string name="tool_network_tools_title">أدوات فحص الشبكة ومراقب الألعاب</string>
+    <string name="tool_network_tools_desc">كاشف المتصلين على الراوتر، فاحص المنافذ، قياس السرعة، والنافذة العائمة</string>
+
+    <!-- Phase 6: Built-in Ad-Free Browser, Privacy Guard, App Lock & Backup -->
+    <string name="browser_title">المتصفح الخفي المانع للإعلانات</string>
+    <string name="browser_search_hint">ابحث أو أدخل رابط الموقع...</string>
+    <string name="browser_ads_blocked_badge">تم حظر %d إعلان وعنصر تتبع 🛡️</string>
+    <string name="browser_ua_title">تغيير بصمة المتصفح (User-Agent)</string>
+    <string name="browser_ua_mobile">أندرويد أصلي (Android Chrome)</string>
+    <string name="browser_ua_desktop">كمبيوتر مكتبي (Windows Chrome)</string>
+    <string name="browser_ua_ios">آيفون (iPhone Safari)</string>
+    <string name="browser_ua_linux">لينكس (Linux Firefox)</string>
+    <string name="browser_video_skip_active">تخطي إعلانات الفيديو تلقائياً مفعل ⚡</string>
+
+    <string name="clean_share_activity_title">تنظيف الرابط بـ AdBlock Max</string>
+    <string name="clean_share_done">تم تنظيف الرابط بنجاح ونسخه للحافظة! 🧼</string>
+    <string name="clean_share_clean_url">الرابط النظيف:</string>
+    <string name="clean_share_removed_params">المعلمات المحذوفة: %s</string>
+    <string name="clean_share_open_browser">فتح في المتصفح الخفي 🌐</string>
+    <string name="clean_share_share_clean">مشاركة الرابط النظيف 📤</string>
+
+    <string name="privacy_suite_title">جناح الخصوصية والأمان الفائق</string>
+    <string name="tab_privacy_guard">حارس الخصوصية والروابط</string>
+    <string name="tab_ghost_detector">صائد الإعلانات الشبحية</string>
+    <string name="tab_app_lock">قفل التطبيق والتمويه</string>
+    <string name="tab_backup_sync">النسخ الاحتياطي والتحديث</string>
+
+    <string name="safe_preview_title">فاحص الروابط المختصرة (Safe Link Preview)</string>
+    <string name="safe_preview_desc">فك الروابط المختصرة المجهولة لمعرفة الوجهة الحقيقية قبل فتحها وحمايتك من التصيد</string>
+    <string name="safe_preview_hint">أدخل الرابط المختصر (مثل bit.ly/xxx)...</string>
+    <string name="safe_preview_btn">فحص وكشف الوجهة الحقيقية 🔍</string>
+    <string name="safe_preview_final_url">الرابط الحقيقي النهائي:</string>
+    <string name="safe_preview_redirect_hops">عدد عمليات إعادة التوجيه: %d</string>
+
+    <string name="clipboard_guard_title">حارس الحافظة والروابط المنسوخة (Clipboard Guard)</string>
+    <string name="clipboard_guard_desc">تنظيف فوري لروابط التتبع في الحافظة أو مسح محتواها الحساس لمنع التطبيقات الفضولية من قراءتها</string>
+    <string name="clipboard_clean_btn">تنظيف الحافظة الآن 🧼</string>
+    <string name="clipboard_clear_btn">مسح الحافظة تماماً 🗑️</string>
+    <string name="clipboard_empty">الحافظة فارغة حالياً</string>
+    <string name="clipboard_cleaned_toast">تم تنظيف معلمات التتبع من الرابط المنسوخ بنجاح!</string>
+    <string name="clipboard_cleared_toast">تم مسح محتوى الحافظة بالكامل!</string>
+
+    <string name="audio_muter_title">كاتم الإعلانات الصوتية (Audio Ad Muter)</string>
+    <string name="audio_muter_desc">كتم صوت الوسائط تلقائياً أثناء الفواصل الإعلانية المزعجة في تطبيقات الموسيقى وإعادته فوراً</string>
+
+    <string name="ghost_detector_title">صائد الإعلانات الشبحية (Ghost Ad / Overlay Detector)</string>
+    <string name="ghost_detector_desc">كشف التطبيقات التي تمتلك صلاحية الظهور فوق الشاشة وتطلق إعلانات منبثقة مجهولة المصدر</string>
+    <string name="ghost_detector_btn">فحص التطبيقات المشبوهة الآن 🕵️</string>
+    <string name="ghost_no_adware">تهانينا! لم يتم العثور على أي تطبيق يمارس إعلانات شبحية على جهازك ✅</string>
+    <string name="ghost_found_count">تم رصد %d تطبيق يمتلك صلاحية الظهور فوق التطبيقات ⚠️</string>
+    <string name="ghost_action_settings">إدارة الصلاحية وإلغاء التثبيت ⚙️</string>
+
+    <string name="app_lock_title">قفل التطبيق والحماية الأبوية (App Lock / PIN)</string>
+    <string name="app_lock_desc">منع فتح التطبيق أو تعديل إعدادات الحظر والوضع العائلي إلا برمز PIN مخصص</string>
+    <string name="app_lock_enable_switch">تفعيل قفل التطبيق برمز PIN</string>
+    <string name="app_lock_set_pin">تعيين رمز PIN جديد (4 أرقام)</string>
+    <string name="app_lock_enter_pin">أدخل رمز PIN للدخول</string>
+    <string name="app_lock_wrong_pin">رمز PIN غير صحيح! حاول مجدداً</string>
+    <string name="app_lock_pin_saved">تم حفظ رمز القفل بنجاح 🔒</string>
+
+    <string name="camouflage_title">تمويه الأيقونة الخارجية (Stealth Camouflage)</string>
+    <string name="camouflage_desc">تغيير اسم وشكل أيقونة التطبيق على شاشة الهاتف لتبدو كأداة نظام عادية للتمويه التام</string>
+    <string name="camouflage_normal">الشكل الأصلي (AdBlock Max 🛡️)</string>
+    <string name="camouflage_stealth">التمويه السري (أدوات النظام ⚙️)</string>
+    <string name="camouflage_changed_toast">تم تغيير مظهر الأيقونة، سيتم تحديث الشاشة الرئيسية خلال لحظات</string>
+
+    <string name="backup_section_title">النسخ الاحتياطي ومشاركة الإعدادات (JSON &amp; QR)</string>
+    <string name="backup_export_btn">تصدير الإعدادات لملف JSON 💾</string>
+    <string name="backup_import_btn">استعادة الإعدادات من ملف JSON 📥</string>
+    <string name="backup_qr_btn">مشاركة الإعدادات عبر كود سريع 📱</string>
+    <string name="backup_export_success">تم حفظ ملف النسخة الاحتياطية بنجاح!</string>
+    <string name="backup_import_success">تمت استعادة كافة الإعدادات وقوائم الحظر بنجاح!</string>
+    <string name="backup_qr_dialog_title">كود مشاركة الإعدادات السريع</string>
+
+    <string name="update_section_title">التحديث التلقائي (GitHub Releases)</string>
+    <string name="update_desc">فحص وجود إصدار جديد لتطبيق AdBlock Max وتحميل التحديث مباشرة</string>
+    <string name="update_check_btn">فحص وجود تحديث جديد 🚀</string>
+    <string name="update_checking">جارٍ الاتصال بمستودع GitHub للتحقق... ⏳</string>
+    <string name="update_is_latest">أنت تستخدم أحدث إصدار بالفعل (v%s) 🟢</string>
+    <string name="update_available_title">يوجد إصدار جديد متاح (%s)! 🎉</string>
+    <string name="update_download_btn">تحميل التحديث المباشر ⬇️</string>
+
+    <string name="tool_browser_title">المتصفح الخفي المانع للإعلانات</string>
+    <string name="tool_browser_desc">تصفح بدون أي إعلانات، حظر البوب أب، وتخطي إعلانات الفيديو تلقائياً</string>
+    <string name="tool_privacy_suite_title">جناح الخصوصية والأمان الفائق</string>
+    <string name="tool_privacy_suite_desc">منظف الروابط، صائد الإعلانات الشبحية، قفل التطبيق، والنسخ الاحتياطي</string>
+</resources>

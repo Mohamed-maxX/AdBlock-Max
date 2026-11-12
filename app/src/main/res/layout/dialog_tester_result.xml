@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_neon_card"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <ImageView
+        android:id="@+id/ivTesterIcon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_bug_check"
+        app:tint="@color/neon_green" />
+
+    <ProgressBar
+        android:id="@+id/pbTesterLoading"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:indeterminateTint="@color/neon_cyan"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tvTesterTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/dialog_test_blocked_title"
+        android:textAlignment="center"
+        android:textColor="@color/text_primary"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tvTesterMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:lineSpacingMultiplier="1.2"
+        android:text="@string/dialog_test_blocked_msg"
+        android:textAlignment="center"
+        android:textColor="@color/text_secondary"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/tvTestedDomain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_stat_chip"
+        android:fontFamily="monospace"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="4dp"
+        android:text="pagead2.googlesyndication.com -> 0.0.0.0"
+        android:textColor="@color/neon_cyan"
+        android:textSize="11sp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnTesterClose"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/neon_blue"
+        android:text="@string/dialog_btn_ok"
+        android:textColor="@color/text_primary" />
+</LinearLayout>

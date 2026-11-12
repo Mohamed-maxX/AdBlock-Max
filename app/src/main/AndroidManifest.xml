@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Network & VPN Permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- Phase 2 Permissions -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- Phase 5: Floating Monitor Overlay Permission -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <!-- Auto-Update APK Installation Permission -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AdBlockMax">
+
+        <!-- Main Cyberpunk UI Activity -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <!-- Phase 2: App Icon Shortcuts -->
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
+        </activity>
+
+        <!-- Phase 3: App Firewall & Management Activity -->
+        <activity
+            android:name=".AppFirewallActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
+        <!-- Phase 4: Live DNS Radar & Analytics Activity -->
+        <activity
+            android:name=".DnsRadarActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
+        <!-- Phase 5: Network & Router Security Suite Activity -->
+        <activity
+            android:name=".NetworkToolsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
+        <!-- Phase 6: Clean Share Activity -->
+        <activity
+            android:name=".CleanShareActivity"
+            android:exported="true"
+            android:label="@string/clean_share_activity_title"
+            android:theme="@style/Theme.AdBlockMax">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+
+        <!-- Phase 6: Ad-Free Built-in Browser Activity -->
+        <activity
+            android:name=".BrowserActivity"
+            android:exported="false"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
+        <!-- Phase 6: Privacy Suite, App Lock & Backup Activity -->
+        <activity
+            android:name=".PrivacySuiteActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
+        <!-- Phase 6: Stealth Camouflage Activity Alias -->
+        <activity-alias
+            android:name=".MainActivityStealth"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@drawable/ic_settings"
+            android:label="أدوات النظام"
+            android:targetActivity=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- Phase 5: Floating Game Monitor Service -->
+        <service
+            android:name=".FloatingMonitorService"
+            android:exported="false" />
+
+        <!-- Phase 6: Audio Ad Muter Notification Listener Service -->
+        <service
+            android:name=".AudioAdMuterService"
+            android:exported="true"
+            android:label="@string/audio_muter_title"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
+        <!-- Ultra-lightweight Local VPN Engine -->
+        <service
+            android:name=".AdBlockVpnService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse"
+            android:permission="android.permission.BIND_VPN_SERVICE">
+            <intent-filter>
+                <action android:name="android.net.VpnService" />
+            </intent-filter>
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Local DNS ad-block VPN filtering" />
+        </service>
+
+        <!-- Notification Action Receiver (Pause/Stop) -->
+        <receiver
+            android:name=".VpnActionReceiver"
+            android:exported="false" />
+
+        <!-- Phase 2: Quick Settings TileService -->
+        <service
+            android:name=".AdBlockTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_shield_protected"
+            android:label="@string/tile_label"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <!-- Phase 2: Home Screen Widget Provider -->
+        <receiver
+            android:name=".AdBlockWidgetProvider"
+            android:exported="true"
+            android:label="@string/widget_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.max.adblock.ACTION_TOGGLE_WIDGET" />
+                <action android:name="com.max.adblock.VPN_STATE_CHANGED" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/adblock_widget_info" />
+        </receiver>
+
+        <!-- Phase 2: Boot Completed Receiver -->
+        <receiver
+            android:name=".BootCompletedReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+
+        <!-- FileProvider for APK Auto-Updates -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+    </application>
+
+</manifest>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_neon_card"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/tvQuotaDialogTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/firewall_dialog_quota_title"
+        android:textColor="@color/neon_cyan"
+        android:textSize="17sp" />
+
+    <TextView
+        android:id="@+id/tvQuotaDialogMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="حدد الحد الأقصى للميجابايت اليومية لهذا التطبيق لمنع استنزاف باقة الإنترنت."
+        android:textColor="@color/text_secondary"
+        android:textSize="12sp" />
+
+    <!-- Radio Group for Quotas -->
+    <RadioGroup
+        android:id="@+id/rgQuotas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp">
+
+        <RadioButton
+            android:id="@+id/rbQuotaUnlimited"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/neon_cyan"
+            android:text="بلا حدود (مفتوح)"
+            android:textColor="@color/text_primary" />
+
+        <RadioButton
+            android:id="@+id/rbQuota50"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/neon_cyan"
+            android:text="50 ميجابايت يومياً"
+            android:textColor="@color/text_primary" />
+
+        <RadioButton
+            android:id="@+id/rbQuota100"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/neon_cyan"
+            android:text="100 ميجابايت يومياً"
+            android:textColor="@color/text_primary" />
+
+        <RadioButton
+            android:id="@+id/rbQuota250"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/neon_cyan"
+            android:text="250 ميجابايت يومياً"
+            android:textColor="@color/text_primary" />
+
+        <RadioButton
+            android:id="@+id/rbQuota500"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/neon_cyan"
+            android:text="500 ميجابايت يومياً"
+            android:textColor="@color/text_primary" />
+    </RadioGroup>
+
+    <!-- Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCancelQuota"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="إلغاء"
+            android:textColor="@color/text_secondary" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSaveQuota"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:backgroundTint="@color/neon_blue"
+            android:text="حفظ وتطبيق"
+            android:textColor="@color/text_primary" />
+    </LinearLayout>
+
+</LinearLayout>

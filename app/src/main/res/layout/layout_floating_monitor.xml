@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/floatingRoot"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_floating_pill"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingHorizontal="14dp"
+    android:paddingVertical="8dp">
+
+    <!-- Ping Display -->
+    <TextView
+        android:id="@+id/tvFloatingPing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-black"
+        android:text="24 ms"
+        android:textColor="@color/neon_green"
+        android:textSize="13sp" />
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="14dp"
+        android:layout_marginHorizontal="10dp"
+        android:background="@color/card_stroke" />
+
+    <!-- Blocked Ads Count -->
+    <TextView
+        android:id="@+id/tvFloatingBlocked"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-black"
+        android:text="142 🛡️"
+        android:textColor="@color/neon_cyan"
+        android:textSize="13sp" />
+
+    <!-- Close Button -->
+    <ImageView
+        android:id="@+id/btnFloatingClose"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="10dp"
+        android:contentDescription="إغلاق"
+        android:src="@drawable/ic_close_small"
+        app:tint="@color/text_dim" />
+
+</LinearLayout>
