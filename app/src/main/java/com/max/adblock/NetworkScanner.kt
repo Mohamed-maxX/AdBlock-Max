@@ -6,6 +6,8 @@ import android.net.NetworkCapabilities
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
 import java.net.InetAddress
@@ -83,23 +85,26 @@ object NetworkScanner {
             )
         )
 
-        // Scan common host range 2..30 concurrently for speed
+        // Scan common host range 2..30 with Semaphore concurrency throttling (max 6 parallel)
+        val subnetSemaphore = Semaphore(6)
         val scanJobs = (2..30).map { hostNum ->
             async {
-                val targetIp = prefix + hostNum
-                if (targetIp != localIp && targetIp != gatewayIp) {
-                    val isAlive = isHostAlive(targetIp)
-                    if (isAlive) {
-                        val ping = PingTester.measurePingMs(targetIp, port = 80).coerceAtLeast(8)
-                        WifiDevice(
-                            ip = targetIp,
-                            name = context.getString(R.string.wifi_device_connected),
-                            isGateway = false,
-                            isThisDevice = false,
-                            pingMs = ping
-                        )
+                subnetSemaphore.withPermit {
+                    val targetIp = prefix + hostNum
+                    if (targetIp != localIp && targetIp != gatewayIp) {
+                        val isAlive = isHostAlive(targetIp)
+                        if (isAlive) {
+                            val ping = PingTester.measurePingMs(targetIp, port = 80).coerceAtLeast(8)
+                            WifiDevice(
+                                ip = targetIp,
+                                name = context.getString(R.string.wifi_device_connected),
+                                isGateway = false,
+                                isThisDevice = false,
+                                pingMs = ping
+                            )
+                        } else null
                     } else null
-                } else null
+                }
             }
         }
 
@@ -126,12 +131,18 @@ object NetworkScanner {
     private fun isHostAlive(ip: String): Boolean {
         return try {
             Socket().use { socket ->
+                try {
+                    PingTester.vpnServiceInstance?.protect(socket)
+                } catch (e: Exception) {}
                 socket.connect(InetSocketAddress(ip, 80), 120)
                 true
             }
         } catch (e: Exception) {
             try {
                 Socket().use { socket ->
+                    try {
+                        PingTester.vpnServiceInstance?.protect(socket)
+                    } catch (ex: Exception) {}
                     socket.connect(InetSocketAddress(ip, 443), 120)
                     true
                 }
@@ -142,23 +153,31 @@ object NetworkScanner {
     }
 
     suspend fun scanPorts(host: String = "127.0.0.1"): List<PortScanResult> = withContext(Dispatchers.IO) {
+        val portSemaphore = Semaphore(4)
         COMMON_PORTS.map { (port, desc) ->
-            val isOpen = try {
-                Socket().use { socket ->
-                    socket.connect(InetSocketAddress(host, port), 200)
-                    true
-                }
-            } catch (e: Exception) {
-                false
-            }
+            async {
+                portSemaphore.withPermit {
+                    val isOpen = try {
+                        Socket().use { socket ->
+                            try {
+                                PingTester.vpnServiceInstance?.protect(socket)
+                            } catch (e: Exception) {}
+                            socket.connect(InetSocketAddress(host, port), 200)
+                            true
+                        }
+                    } catch (e: Exception) {
+                        false
+                    }
 
-            PortScanResult(
-                port = port,
-                serviceName = desc,
-                isOpen = isOpen,
-                description = if (isOpen) "منفذ مفتوح يتطلب حماية" else "مغلق وآمن"
-            )
-        }
+                    PortScanResult(
+                        port = port,
+                        serviceName = desc,
+                        isOpen = isOpen,
+                        description = if (isOpen) "منفذ مفتوح يتطلب حماية" else "مغلق وآمن"
+                    )
+                }
+            }
+        }.awaitAll()
     }
 
     fun isCaptivePortal(context: Context): Boolean {
@@ -172,36 +191,39 @@ object NetworkScanner {
         var totalBytes = 0L
         var downloadSpeedMbps = 0f
         var jitterMs = 4f
+        var connection: HttpURLConnection? = null
 
         try {
             val startTime = System.currentTimeMillis()
             val url = URL("https://speed.cloudflare.com/__down?bytes=3000000")
-            val connection = url.openConnection() as HttpURLConnection
+            connection = url.openConnection() as HttpURLConnection
             connection.connectTimeout = 3000
             connection.readTimeout = 4000
             connection.connect()
 
-            val inputStream = connection.inputStream
             val buffer = ByteArray(8192)
             var bytesRead: Int
 
-            while (inputStream.read(buffer).also { bytesRead = it } != -1) {
-                totalBytes += bytesRead
-                val elapsed = System.currentTimeMillis() - startTime
-                if (elapsed > 100) {
-                    val speed = (totalBytes * 8f) / (elapsed / 1000f) / 1000000f
-                    onProgress(speed, jitterMs)
+            connection.inputStream.use { input ->
+                while (input.read(buffer).also { bytesRead = it } != -1) {
+                    totalBytes += bytesRead
+                    val elapsed = System.currentTimeMillis() - startTime
+                    if (elapsed > 100) {
+                        val speed = (totalBytes * 8f) / (elapsed / 1000f) / 1000000f
+                        onProgress(speed, jitterMs)
+                    }
                 }
             }
             val totalTimeSec = (System.currentTimeMillis() - startTime) / 1000f
             downloadSpeedMbps = if (totalTimeSec > 0) (totalBytes * 8f) / totalTimeSec / 1000000f else 42.5f
             jitterMs = (2..6).random().toFloat()
-            connection.disconnect()
         } catch (e: Exception) {
             // Simulated realistic fallback test if offline / captive
             downloadSpeedMbps = (35..68).random().toFloat() + 0.4f
             jitterMs = (3..7).random().toFloat()
             onProgress(downloadSpeedMbps, jitterMs)
+        } finally {
+            connection?.disconnect()
         }
 
         Pair(downloadSpeedMbps, jitterMs)

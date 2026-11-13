@@ -95,7 +95,13 @@ class FloatingMonitorService : Service() {
             stopSelf()
         }
 
-        windowManager?.addView(floatingView, params)
+        try {
+            windowManager?.addView(floatingView, params)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            stopSelf()
+            return
+        }
 
         // Loop to update Ping and Blocked count
         updateJob = scope.launch {
@@ -111,11 +117,20 @@ class FloatingMonitorService : Service() {
 
     override fun onDestroy() {
         updateJob?.cancel()
-        if (floatingView != null) {
+        floatingView?.let { view ->
             try {
-                windowManager?.removeView(floatingView)
+                if (view.isAttachedToWindow) {
+                    windowManager?.removeViewImmediate(view)
+                } else {
+                    windowManager?.removeView(view)
+                }
+            } catch (e: IllegalArgumentException) {
+                // View not attached to window manager
             } catch (e: Exception) {
                 e.printStackTrace()
+            } finally {
+                floatingView = null
+                binding = null
             }
         }
         super.onDestroy()

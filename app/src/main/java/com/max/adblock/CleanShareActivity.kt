@@ -19,15 +19,32 @@ class CleanShareActivity : AppCompatActivity() {
         binding = ActivityCleanShareBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val rawText = handleIntent(intent)
-        if (rawText.isNullOrBlank()) {
-            Toast.makeText(this, "لم يتم العثور على رابط للمشاركة", Toast.LENGTH_SHORT).show()
-            finish()
-            return
+        if (AppLockManager.isLockRequired(this)) {
+            AppLockManager.promptAppLock(this) {
+                initCleanShare()
+            }
+        } else {
+            initCleanShare()
         }
+    }
 
-        processUrl(rawText)
-        setupActions()
+    private fun initCleanShare() {
+        try {
+            val rawText = handleIntent(intent)
+            if (rawText.isNullOrBlank()) {
+                Toast.makeText(this, "لم يتم العثور على رابط للمشاركة", Toast.LENGTH_SHORT).show()
+                finish()
+                return
+            }
+
+            val safeText = if (rawText.length > 4096) rawText.substring(0, 4096) else rawText
+            processUrl(safeText)
+            setupActions()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "خطأ أثناء معالجة الرابط", Toast.LENGTH_SHORT).show()
+            finish()
+        }
     }
 
     private fun handleIntent(incomingIntent: Intent?): String? {
@@ -89,11 +106,15 @@ class CleanShareActivity : AppCompatActivity() {
     }
 
     private fun copyToClipboard(text: String, showToast: Boolean) {
-        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clip = ClipData.newPlainText("Clean URL", text)
-        clipboard.setPrimaryClip(clip)
-        if (showToast) {
-            Toast.makeText(this, R.string.clean_share_done, Toast.LENGTH_SHORT).show()
+        try {
+            val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("Clean URL", text)
+            clipboard.setPrimaryClip(clip)
+            if (showToast) {
+                Toast.makeText(this, R.string.clean_share_done, Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 }

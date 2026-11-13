@@ -100,8 +100,14 @@ class MainActivity : AppCompatActivity() {
         setupAutomationSwitches()
         setupSleepTimer()
 
-        // Handle Shortcut intents
-        handleShortcutIntent(intent)
+        // Handle Shortcut intents with App Lock verification
+        if (AppLockManager.isLockRequired(this)) {
+            AppLockManager.promptAppLock(this) {
+                handleShortcutIntent(intent)
+            }
+        } else {
+            handleShortcutIntent(intent)
+        }
 
         // Sync initial UI with current state
         updateUiState(prefs.isVpnActive, prefs.isVpnPaused)
@@ -111,7 +117,13 @@ class MainActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        handleShortcutIntent(intent)
+        if (AppLockManager.isLockRequired(this)) {
+            AppLockManager.promptAppLock(this) {
+                handleShortcutIntent(intent)
+            }
+        } else {
+            handleShortcutIntent(intent)
+        }
     }
 
     private fun handleShortcutIntent(intent: Intent?) {
@@ -149,6 +161,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        AppLockManager.notifyAppForegrounded()
         updateBatteryStatus()
         if (AppLockManager.isLockRequired(this)) {
             AppLockManager.promptAppLock(this) {
@@ -159,6 +172,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
+        AppLockManager.notifyAppBackgrounded()
         networkMonitor.stop()
         automationManager.stop()
         try {

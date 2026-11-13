@@ -152,21 +152,36 @@ object UpdateManager {
         return false
     }
 
+    fun isAllowedDownloadUrl(url: String): Boolean {
+        val trimmed = url.trim()
+        val lower = trimmed.lowercase()
+        return lower.startsWith("https://github.com/mohamed-maxx/adblock-max/") ||
+               lower.startsWith("https://objects.githubusercontent.com/") ||
+               lower.startsWith("https://raw.githubusercontent.com/mohamed-maxx/adblock-max/")
+    }
+
     suspend fun downloadApk(
         context: Context,
         downloadUrl: String,
         onProgress: (Int) -> Unit
     ): File? = withContext(Dispatchers.IO) {
+        if (!isAllowedDownloadUrl(downloadUrl)) {
+            return@withContext null
+        }
+
+        var connection: HttpURLConnection? = null
+        val dir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
+            ?: File(context.cacheDir, "updates").apply { mkdirs() }
+        val outputFile = File(dir, "AdBlockMax_Update.apk")
+
         try {
             val url = URL(downloadUrl)
-            val connection = url.openConnection() as HttpURLConnection
+            connection = url.openConnection() as HttpURLConnection
             connection.connectTimeout = 8000
             connection.readTimeout = 8000
             connection.connect()
 
             val fileLength = connection.contentLength
-            val dir = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS) ?: context.cacheDir
-            val outputFile = File(dir, "AdBlockMax_Update.apk")
 
             connection.inputStream.use { input ->
                 FileOutputStream(outputFile).use { output ->
@@ -187,12 +202,22 @@ object UpdateManager {
             outputFile
         } catch (e: Exception) {
             e.printStackTrace()
+            if (outputFile.exists() && outputFile.length() == 0L) {
+                outputFile.delete()
+            }
             null
+        } finally {
+            connection?.disconnect()
         }
     }
 
     fun promptInstallApk(activity: Activity, apkFile: File) {
         try {
+            if (!apkFile.exists() || apkFile.length() == 0L) {
+                Toast.makeText(activity, "ملف التحديث غير موجود أو تالف", Toast.LENGTH_SHORT).show()
+                return
+            }
+
             val apkUri = FileProvider.getUriForFile(
                 activity,
                 "${activity.packageName}.fileprovider",

@@ -40,6 +40,16 @@ class NetworkToolsActivity : AppCompatActivity() {
         binding = ActivityNetworkToolsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        if (AppLockManager.isLockRequired(this)) {
+            AppLockManager.promptAppLock(this) {
+                initNetworkToolsUi()
+            }
+        } else {
+            initNetworkToolsUi()
+        }
+    }
+
+    private fun initNetworkToolsUi() {
         setupToolbar()
         setupTabs()
         setupWifiScanner()

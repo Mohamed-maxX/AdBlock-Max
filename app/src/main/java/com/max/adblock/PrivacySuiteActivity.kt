@@ -20,7 +20,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.button.MaterialButton
 import com.max.adblock.databinding.ActivityPrivacySuiteBinding
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PrivacySuiteActivity : AppCompatActivity() {
 
@@ -35,6 +37,16 @@ class PrivacySuiteActivity : AppCompatActivity() {
 
         prefs = PreferencesManager(this)
 
+        if (AppLockManager.isLockRequired(this)) {
+            AppLockManager.promptAppLock(this) {
+                initPrivacySuiteUi()
+            }
+        } else {
+            initPrivacySuiteUi()
+        }
+    }
+
+    private fun initPrivacySuiteUi() {
         setupToolbar()
         setupTabs()
         setupPrivacyGuardTab()
@@ -285,10 +297,24 @@ class PrivacySuiteActivity : AppCompatActivity() {
                 .setView(input)
                 .setPositiveButton("استعادة الآن 📥") { _, _ ->
                     val text = input.text.toString().trim()
-                    if (text.isNotBlank() && prefs.importSettingsFromJson(text)) {
-                        Toast.makeText(this, R.string.backup_import_success, Toast.LENGTH_LONG).show()
-                    } else {
-                        Toast.makeText(this, "صيغة ملف JSON غير صحيحة!", Toast.LENGTH_SHORT).show()
+                    if (text.isBlank()) {
+                        Toast.makeText(this, "يرجى لصق نص JSON أولاً", Toast.LENGTH_SHORT).show()
+                        return@setPositiveButton
+                    }
+                    if (text.length > 500_000) {
+                        Toast.makeText(this, "حجم النص كبير جداً!", Toast.LENGTH_SHORT).show()
+                        return@setPositiveButton
+                    }
+
+                    lifecycleScope.launch {
+                        val success = withContext(Dispatchers.IO) {
+                            prefs.importSettingsFromJson(text)
+                        }
+                        if (success) {
+                            Toast.makeText(this@PrivacySuiteActivity, R.string.backup_import_success, Toast.LENGTH_LONG).show()
+                        } else {
+                            Toast.makeText(this@PrivacySuiteActivity, "صيغة ملف JSON غير صحيحة أو البيانات تالفة!", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
                 .setNegativeButton("إلغاء", null)

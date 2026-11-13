@@ -160,7 +160,12 @@ class AdBlockVpnService : VpnService() {
             )
             builder.setConfigureIntent(pendingContentIntent)
 
-            vpnInterface = builder.establish()
+            val establishedInterface = builder.establish()
+            if (establishedInterface == null) {
+                stopVpn()
+                return
+            }
+            vpnInterface = establishedInterface
 
             prefs.isVpnActive = true
             prefs.isVpnPaused = false

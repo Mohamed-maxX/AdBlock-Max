@@ -51,6 +51,16 @@ class AppFirewallActivity : AppCompatActivity() {
 
         prefs = PreferencesManager(this)
 
+        if (AppLockManager.isLockRequired(this)) {
+            AppLockManager.promptAppLock(this) {
+                initFirewallUi()
+            }
+        } else {
+            initFirewallUi()
+        }
+    }
+
+    private fun initFirewallUi() {
         setupToolbar()
         setupFilters()
         setupSearch()

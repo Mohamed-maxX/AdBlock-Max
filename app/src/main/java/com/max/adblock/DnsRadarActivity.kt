@@ -48,6 +48,16 @@ class DnsRadarActivity : AppCompatActivity() {
         prefs = PreferencesManager(this)
         DnsTrafficManager.initialize(this)
 
+        if (AppLockManager.isLockRequired(this)) {
+            AppLockManager.promptAppLock(this) {
+                initRadarUi()
+            }
+        } else {
+            initRadarUi()
+        }
+    }
+
+    private fun initRadarUi() {
         setupToolbar()
         setupTabs()
         setupRadarFeed()

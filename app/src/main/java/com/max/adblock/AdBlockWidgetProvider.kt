@@ -23,6 +23,7 @@ class AdBlockWidgetProvider : AppWidgetProvider() {
                 val intent = Intent(context, AdBlockWidgetProvider::class.java).apply {
                     action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
                     putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds)
+                    setPackage(context.packageName)
                 }
                 context.sendBroadcast(intent)
             }
@@ -52,9 +53,10 @@ class AdBlockWidgetProvider : AppWidgetProvider() {
 
             views.setTextViewText(R.id.tvWidgetMode, modeTitle)
 
-            // Toggle Click Intent
+            // Toggle Click Intent (Strictly explicitly targeted to our package)
             val toggleIntent = Intent(context, AdBlockWidgetProvider::class.java).apply {
                 action = ACTION_TOGGLE_WIDGET
+                setPackage(context.packageName)
             }
             val togglePendingIntent = PendingIntent.getBroadcast(
                 context,
@@ -74,6 +76,11 @@ class AdBlockWidgetProvider : AppWidgetProvider() {
         val action = intent.action
 
         if (action == ACTION_TOGGLE_WIDGET) {
+            // Verify intent is internal
+            val pkg = intent.`package` ?: intent.component?.packageName
+            if (pkg != null && pkg != context.packageName) {
+                return
+            }
             val prefs = PreferencesManager(context)
             val isActive = prefs.isVpnActive && !prefs.isVpnPaused
 

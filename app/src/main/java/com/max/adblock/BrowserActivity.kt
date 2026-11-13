@@ -3,8 +3,11 @@ package com.max.adblock
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.http.SslError
+import android.os.Build
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
+import android.webkit.SslErrorHandler
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -50,6 +53,16 @@ class BrowserActivity : AppCompatActivity() {
 
         prefs = PreferencesManager(this)
 
+        if (AppLockManager.isLockRequired(this)) {
+            AppLockManager.promptAppLock(this) {
+                initBrowserUi()
+            }
+        } else {
+            initBrowserUi()
+        }
+    }
+
+    private fun initBrowserUi() {
         setupWebView()
         setupListeners()
 
@@ -64,7 +77,18 @@ class BrowserActivity : AppCompatActivity() {
         settings.domStorageEnabled = true
         settings.databaseEnabled = true
         settings.mediaPlaybackRequiresUserGesture = false
-        settings.mixedContentMode = WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
+
+        // Security Hardening: Block local file and cross-origin file URL access
+        settings.allowFileAccess = false
+        settings.allowContentAccess = false
+        @Suppress("DEPRECATION")
+        settings.allowFileAccessFromFileURLs = false
+        @Suppress("DEPRECATION")
+        settings.allowUniversalAccessFromFileURLs = false
+        settings.mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            settings.safeBrowsingEnabled = true
+        }
 
         applyUserAgent(prefs.preferredUserAgent)
 
@@ -76,6 +100,22 @@ class BrowserActivity : AppCompatActivity() {
         }
 
         binding.wvBrowser.webViewClient = object : WebViewClient() {
+            override fun onReceivedSslError(
+                view: WebView?,
+                handler: SslErrorHandler?,
+                error: SslError?
+            ) {
+                // Strict Security: Cancel immediately on SSL errors, never proceed!
+                handler?.cancel()
+                runOnUiThread {
+                    Toast.makeText(
+                        this@BrowserActivity,
+                        "تم حظر الصفحة: خطأ في شهادة الأمان (SSL Error)",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 blockedAdsCounter.set(0)
                 updateBlockedCounter()

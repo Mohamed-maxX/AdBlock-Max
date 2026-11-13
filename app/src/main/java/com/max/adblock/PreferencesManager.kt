@@ -307,8 +307,26 @@ class PreferencesManager(context: Context) {
             val root = org.json.JSONObject(jsonString)
             val editor = prefs.edit()
             val keys = root.keys()
+
+            // Strict Whitelist of allowed import keys (protects against PIN override or malicious key injection)
+            val allowedKeys = setOf(
+                KEY_SELECTED_MODE, KEY_CUSTOM_IPV4, KEY_CUSTOM_IPV6,
+                KEY_AUTO_BOOT, KEY_AUTO_WIFI, KEY_AUTO_CELLULAR,
+                KEY_SCREEN_OFF_LOCKDOWN, KEY_AUTO_FAILOVER, KEY_KILL_SWITCH,
+                KEY_SLEEP_TIMER_MINUTES, KEY_ACTIVE_PROFILE,
+                KEY_BLOCKED_FIREWALL_APPS, KEY_BYPASSED_APPS, KEY_BLOCK_AUTO_UPDATES,
+                KEY_CUSTOM_BLACKLIST, KEY_CUSTOM_WHITELIST, KEY_GEO_BLOCKED_TLDS,
+                KEY_FILTER_GENERAL_ADS, KEY_FILTER_TRACKERS, KEY_FILTER_CRYPTOMINING,
+                KEY_FILTER_SOCIAL, KEY_GEO_BLOCKING_ENABLED,
+                KEY_AUDIO_MUTER_ENABLED, KEY_STEALTH_CAMOUFLAGE, KEY_PREFERRED_UA
+            )
+
             while (keys.hasNext()) {
                 val key = keys.next()
+                if (!allowedKeys.contains(key) && !key.startsWith(PREFIX_APP_QUOTA)) {
+                    continue
+                }
+
                 val value = root.get(key)
                 when (value) {
                     is Boolean -> editor.putBoolean(key, value)
@@ -319,7 +337,8 @@ class PreferencesManager(context: Context) {
                     is org.json.JSONArray -> {
                         val set = mutableSetOf<String>()
                         for (i in 0 until value.length()) {
-                            set.add(value.getString(i))
+                            val str = value.optString(i)
+                            if (str.isNotBlank()) set.add(str)
                         }
                         editor.putStringSet(key, set)
                     }
