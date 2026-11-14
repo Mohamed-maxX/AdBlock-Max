@@ -14,6 +14,7 @@ import androidx.core.app.NotificationCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -315,6 +316,7 @@ class AdBlockVpnService : VpnService() {
     }
 
     override fun onDestroy() {
+        serviceScope.coroutineContext.cancelChildren()
         failoverMonitorJob?.cancel()
         consecutiveFailures = 0
         PingTester.vpnServiceInstance = null
@@ -323,6 +325,8 @@ class AdBlockVpnService : VpnService() {
             vpnInterface?.close()
         } catch (e: Exception) {
             e.printStackTrace()
+        } finally {
+            vpnInterface = null
         }
         prefs.isVpnActive = false
         prefs.isVpnPaused = false

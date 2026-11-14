@@ -16,6 +16,7 @@ import com.max.adblock.databinding.LayoutFloatingMonitorBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -57,8 +58,8 @@ class FloatingMonitorService : Service() {
             WindowManager.LayoutParams.WRAP_CONTENT,
             layoutType,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
-                    WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN or
-                    WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
+                    WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
             PixelFormat.TRANSLUCENT
         ).apply {
             gravity = Gravity.TOP or Gravity.START
@@ -66,7 +67,11 @@ class FloatingMonitorService : Service() {
             y = 200
         }
 
-        // Draggable touch handling
+        val displayMetrics = resources.displayMetrics
+        val screenWidth = displayMetrics.widthPixels
+        val screenHeight = displayMetrics.heightPixels
+
+        // Draggable touch handling with strict screen bounds clamping
         var initialX = 0
         var initialY = 0
         var initialTouchX = 0f
@@ -82,8 +87,16 @@ class FloatingMonitorService : Service() {
                     true
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    params.x = initialX + (event.rawX - initialTouchX).toInt()
-                    params.y = initialY + (event.rawY - initialTouchY).toInt()
+                    val rawNewX = initialX + (event.rawX - initialTouchX).toInt()
+                    val rawNewY = initialY + (event.rawY - initialTouchY).toInt()
+                    val pillWidth = floatingView?.width ?: 200
+                    val pillHeight = floatingView?.height ?: 80
+
+                    // Strictly clamp overlay within screen bounds:
+                    // Never allow overlay to escape screen or cover critical system areas
+                    params.x = rawNewX.coerceIn(0, (screenWidth - pillWidth).coerceAtLeast(0))
+                    params.y = rawNewY.coerceIn(50, (screenHeight - pillHeight - 50).coerceAtLeast(50))
+
                     windowManager?.updateViewLayout(floatingView, params)
                     true
                 }
@@ -116,7 +129,10 @@ class FloatingMonitorService : Service() {
     }
 
     override fun onDestroy() {
+        scope.coroutineContext.cancelChildren()
         updateJob?.cancel()
+        updateJob = null
+
         floatingView?.let { view ->
             try {
                 if (view.isAttachedToWindow) {
@@ -134,5 +150,10 @@ class FloatingMonitorService : Service() {
             }
         }
         super.onDestroy()
+    }
+
+    override fun onUnbind(intent: Intent?): Boolean {
+        onDestroy()
+        return super.onUnbind(intent)
     }
 }

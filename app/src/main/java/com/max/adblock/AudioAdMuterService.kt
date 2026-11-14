@@ -81,4 +81,18 @@ class AudioAdMuterService : NotificationListenerService() {
             e.printStackTrace()
         }
     }
+
+    override fun onDestroy() {
+        if (isCurrentlyMuted) {
+            unmuteAudio()
+        }
+        super.onDestroy()
+    }
+
+    override fun onListenerDisconnected() {
+        if (isCurrentlyMuted) {
+            unmuteAudio()
+        }
+        super.onListenerDisconnected()
+    }
 }
