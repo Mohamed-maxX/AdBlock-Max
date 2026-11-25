@@ -175,6 +175,48 @@ class BrowserActivity : AppCompatActivity() {
         """.trimIndent()
 
         binding.wvBrowser.evaluateJavascript(cosmeticCss, null)
+
+        // v2.1.0 Feature 3: Auto Cookie-Banner Rejecter
+        if (prefs.smartAutoRejectCookies) {
+            val cookieRejectJs = """
+                (function() {
+                    var rejectSelectors = [
+                        '#onetrust-reject-all-handler',
+                        '#CybotCookiebotDialogBodyButtonDecline',
+                        '#didomi-notice-disagree-button',
+                        'button[aria-label*="reject" i]',
+                        'button[aria-label*="decline" i]',
+                        'button[id*="reject" i]',
+                        'button[class*="reject" i]',
+                        'a[class*="reject" i]'
+                    ];
+                    function tryRejectCookies() {
+                        for (var i = 0; i < rejectSelectors.length; i++) {
+                            var btn = document.querySelector(rejectSelectors[i]);
+                            if (btn && btn.offsetParent !== null) {
+                                btn.click();
+                                return true;
+                            }
+                        }
+                        var buttons = document.querySelectorAll('button, a[role="button"]');
+                        for (var j = 0; j < buttons.length; j++) {
+                            var txt = (buttons[j].innerText || '').trim().toLowerCase();
+                            if (txt === 'reject all' || txt === 'decline all' || txt === 'only necessary' || txt === 'رفض الكل' || txt === 'رفض') {
+                                buttons[j].click();
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                    tryRejectCookies();
+                    setTimeout(tryRejectCookies, 1200);
+                    var hideCookieStyle = document.createElement('style');
+                    hideCookieStyle.textContent = '#onetrust-banner-sdk, #CybotCookiebotDialog, #didomi-host, .cookie-banner, #cookie-consent, [class*="cookie-notice"] { display: none !important; }';
+                    (document.head || document.documentElement).appendChild(hideCookieStyle);
+                })();
+            """.trimIndent()
+            binding.wvBrowser.evaluateJavascript(cookieRejectJs, null)
+        }
     }
 
     private fun updateBlockedCounter() {

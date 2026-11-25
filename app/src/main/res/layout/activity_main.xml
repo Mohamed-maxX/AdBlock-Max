@@ -74,7 +74,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-bold"
-                    android:text="v1.0.0 • فحص 🔄"
+                    android:text="v2.1.0 • فحص 🔄"
                     android:textColor="@color/neon_cyan"
                     android:textSize="11sp" />
             </LinearLayout>
@@ -1025,6 +1025,104 @@
             android:textColor="@color/neon_cyan"
             android:textSize="16sp" />
 
+        <!-- v2.1.0 Featured Tool: Smart AI Hub -->
+        <LinearLayout
+            android:id="@+id/btnSmartHub"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_neon_card_selected"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="14dp">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginEnd="12dp"
+                android:src="@drawable/ic_smart_ai"
+                app:tint="@color/neon_cyan" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-black"
+                    android:text="@string/tool_smart_hub_title"
+                    android:textColor="@color/neon_cyan"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/tool_smart_hub_desc"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_stat_chip"
+                android:fontFamily="monospace"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
+                android:text="18 AI"
+                android:textColor="@color/neon_cyan"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <!-- v2.1.0 Feature 6: One-Tap Smart Clean -->
+        <LinearLayout
+            android:id="@+id/btnOneTapClean"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_neon_card"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="14dp">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="12dp"
+                android:src="@drawable/ic_clean_sweep"
+                app:tint="@color/neon_green" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-bold"
+                    android:text="@string/tool_one_tap_clean_title"
+                    android:textColor="@color/neon_green"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/tool_one_tap_clean_desc"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+
         <!-- Tool 1: AdBlock Tester -->
         <LinearLayout
             android:id="@+id/btnAdBlockTester"
@@ -1408,19 +1506,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="الإصدار الحالي: v1.0.0 • فحص وتحميل آخر إصدار تلقائياً"
+                    android:text="الإصدار الحالي: v2.1.0 • فحص وتحميل آخر إصدار تلقائياً"
                     android:textColor="@color/text_secondary"
                     android:textSize="12sp" />
             </LinearLayout>
 
             <TextView
+                android:id="@+id/tvMainAppVersionBadge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_stat_chip"
                 android:fontFamily="monospace"
                 android:paddingHorizontal="8dp"
                 android:paddingVertical="4dp"
-                android:text="v1.0.0"
+                android:text="v2.1.0"
                 android:textColor="@color/neon_green"
                 android:textSize="11sp" />
         </LinearLayout>

@@ -112,6 +112,23 @@ class MainActivity : AppCompatActivity() {
         // Sync initial UI with current state
         updateUiState(prefs.isVpnActive, prefs.isVpnPaused)
         updateCustomDnsSummary()
+        observeScreenRecordPrivacy()
+    }
+
+    private fun observeScreenRecordPrivacy() {
+        lifecycleScope.launch {
+            SmartSecurityGuards.isScreenRecordingActive.collect { recording ->
+                if (recording) {
+                    window.setFlags(
+                        android.view.WindowManager.LayoutParams.FLAG_SECURE,
+                        android.view.WindowManager.LayoutParams.FLAG_SECURE
+                    )
+                    binding.tvStatusSubtitle.text = "🎥 وضع الخصوصية نشط أثناء البث/التسجيل (البيانات مخفية)"
+                } else {
+                    window.clearFlags(android.view.WindowManager.LayoutParams.FLAG_SECURE)
+                }
+            }
+        }
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -148,6 +165,7 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
         networkMonitor.start()
         automationManager.start()
+        SmartSecurityGuards.startScreenRecordMonitor(this)
         val filter = IntentFilter(AdBlockVpnService.ACTION_VPN_STATE_CHANGED)
         ContextCompat.registerReceiver(
             this,
@@ -226,6 +244,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun stopVpnInternal() {
+        if (prefs.smartAutoLearnWhitelist) {
+            val lastApp = prefs.lastForegroundAppPkg
+            if (lastApp.isNotBlank() && lastApp != packageName && !prefs.isAppBypassed(lastApp)) {
+                val count = prefs.incrementAppPauseCount(lastApp)
+                if (count >= 3) {
+                    prefs.pendingWhitelistSuggestionPkg = lastApp
+                }
+            }
+        }
         val intent = Intent(this, AdBlockVpnService::class.java).apply {
             action = AdBlockVpnService.ACTION_STOP
         }
@@ -684,10 +711,34 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // v2.1.0: Smart AI Hub
+        binding.btnSmartHub.setOnClickListener {
+            performCyberpunkHaptic()
+            startActivity(Intent(this, SmartHubActivity::class.java))
+        }
+
+        // v2.1.0 Feature 6: One-Tap Smart Clean
+        binding.btnOneTapClean.setOnClickListener {
+            performCyberpunkHaptic()
+            binding.btnOneTapClean.isEnabled = false
+            lifecycleScope.launch {
+                val report = SmartSecurityGuards.performOneTapClean(this@MainActivity)
+                binding.btnOneTapClean.isEnabled = true
+                val msg = buildString {
+                    append("⚡ التنظيف الشامل:\n")
+                    append("• كاش DNS: ${if (report.dnsFlushed) "تم التحديث" else "متوقف"}\n")
+                    append("• الحافظة: ${if (report.clipboardCleaned) "تنظيف ${report.removedTrackerParams} متتبع" else "نظيفة"}\n")
+                    append("• ملفات APK بالتنزيلات: ${report.suspiciousApksFound}")
+                }
+                Toast.makeText(this@MainActivity, msg, Toast.LENGTH_LONG).show()
+            }
+        }
+
         // Auto-Update Checker (Top Header & Main Card)
         val currentVer = UpdateManager.getCurrentVersion(this)
         binding.tvHeaderAppVersion.text = "v$currentVer • تحديث 🔄"
         binding.tvUpdateSubtitle.text = "الإصدار الحالي: v$currentVer • فحص وتحميل آخر إصدار تلقائياً"
+        binding.tvMainAppVersionBadge.text = "v$currentVer"
         binding.btnHeaderCheckUpdate.setOnClickListener {
             performCyberpunkHaptic()
             UpdateManager.showUpdateDialog(this)

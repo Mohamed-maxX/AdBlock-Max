@@ -21,12 +21,13 @@ class AutomationManager(private val context: Context) {
 
     private val screenReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            if (!prefs.screenOffLockdown || !prefs.isVpnActive) return
-
             when (intent.action) {
                 Intent.ACTION_SCREEN_OFF -> {
-                    // Temporarily suspend non-critical traffic
-                    if (!prefs.isVpnPaused) {
+                    // Feature 14: Capture Silent Background Spy Traffic Baseline
+                    SmartSecurityGuards.captureScreenOffSnapshot(context)
+
+                    // Phase 2: Screen-Off Lockdown
+                    if (prefs.screenOffLockdown && prefs.isVpnActive && !prefs.isVpnPaused) {
                         val pauseIntent = Intent(context, AdBlockVpnService::class.java).apply {
                             action = AdBlockVpnService.ACTION_PAUSE_5MIN
                         }
@@ -34,20 +35,54 @@ class AutomationManager(private val context: Context) {
                     }
                 }
                 Intent.ACTION_SCREEN_ON -> {
-                    // Resume immediately
-                    if (prefs.isVpnPaused) {
+                    // Feature 14: Detect suspicious screen-off background traffic spikes
+                    SmartSecurityGuards.evaluateScreenOnSpyActivity(context)
+                    // Feature 10: Evaluate Weekly Schedule
+                    SmartSecurityGuards.evaluateWeeklySchedule(context)
+
+                    if (prefs.screenOffLockdown && prefs.isVpnActive && prefs.isVpnPaused) {
                         val resumeIntent = Intent(context, AdBlockVpnService::class.java).apply {
                             action = AdBlockVpnService.ACTION_RESUME
                         }
                         ContextCompat.startForegroundService(context, resumeIntent)
                     }
                 }
+                Intent.ACTION_BATTERY_CHANGED -> {
+                    // Feature 11: Low-Battery Survival Mode (< 15%)
+                    handleBatteryChanged(context, intent)
+                }
             }
+        }
+    }
+
+    private fun handleBatteryChanged(context: Context, intent: Intent) {
+        if (!prefs.smartBatterySurvivalEnabled) return
+        val level = intent.getIntExtra(android.os.BatteryManager.EXTRA_LEVEL, -1)
+        val scale = intent.getIntExtra(android.os.BatteryManager.EXTRA_SCALE, 100).coerceAtLeast(1)
+        val status = intent.getIntExtra(android.os.BatteryManager.EXTRA_STATUS, -1)
+        val isCharging = status == android.os.BatteryManager.BATTERY_STATUS_CHARGING ||
+            status == android.os.BatteryManager.BATTERY_STATUS_FULL
+
+        if (level < 0) return
+        val pct = (level * 100) / scale
+
+        if (!isCharging && pct <= 15 && !prefs.isBatterySurvivalActive) {
+            prefs.isBatterySurvivalActive = true
+            prefs.screenOffLockdown = true
+            prefs.selectedMode = DnsMode.STANDARD
+            // Stop heavy floating overlay if running
+            try {
+                context.stopService(Intent(context, FloatingMonitorService::class.java))
+            } catch (_: Exception) {
+            }
+        } else if ((isCharging || pct > 22) && prefs.isBatterySurvivalActive) {
+            prefs.isBatterySurvivalActive = false
         }
     }
 
     fun start() {
         registerScreenReceiver()
+        SmartSecurityGuards.evaluateWeeklySchedule(context)
     }
 
     fun stop() {
@@ -60,6 +95,7 @@ class AutomationManager(private val context: Context) {
             val filter = IntentFilter().apply {
                 addAction(Intent.ACTION_SCREEN_OFF)
                 addAction(Intent.ACTION_SCREEN_ON)
+                addAction(Intent.ACTION_BATTERY_CHANGED)
             }
             context.registerReceiver(screenReceiver, filter)
             isScreenReceiverRegistered = true
@@ -78,6 +114,11 @@ class AutomationManager(private val context: Context) {
     }
 
     fun onNetworkChanged(type: NetworkType) {
+        if (type == NetworkType.WIFI) {
+            SmartNetworkGuard.evaluateWifiSecurity(context)
+        }
+        SmartSecurityGuards.evaluateWeeklySchedule(context)
+
         val shouldStart = when (type) {
             NetworkType.WIFI -> prefs.autoOnWifi
             NetworkType.CELLULAR -> prefs.autoOnCellular

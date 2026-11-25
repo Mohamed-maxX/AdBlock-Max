@@ -49,9 +49,9 @@ object UpdateManager {
                 @Suppress("DEPRECATION")
                 context.packageManager.getPackageInfo(context.packageName, 0)
             }
-            pInfo.versionName ?: "1.2.0"
+            pInfo.versionName ?: "2.1.0"
         } catch (e: Exception) {
-            "1.2.0"
+            "2.1.0"
         }
     }
 

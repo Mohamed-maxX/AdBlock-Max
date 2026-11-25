@@ -56,6 +56,24 @@ class NetworkToolsActivity : AppCompatActivity() {
         setupPortScanner()
         setupSpeedTestAndGamingPing()
         setupFloatingMonitor()
+        observeScreenRecordingPrivacy()
+    }
+
+    private fun observeScreenRecordingPrivacy() {
+        lifecycleScope.launch {
+            SmartSecurityGuards.isScreenRecordingActive.collect { recording ->
+                if (recording) {
+                    window.setFlags(
+                        android.view.WindowManager.LayoutParams.FLAG_SECURE,
+                        android.view.WindowManager.LayoutParams.FLAG_SECURE
+                    )
+                    binding.rvWifiDevices.visibility = View.INVISIBLE
+                } else {
+                    window.clearFlags(android.view.WindowManager.LayoutParams.FLAG_SECURE)
+                    binding.rvWifiDevices.visibility = View.VISIBLE
+                }
+            }
+        }
     }
 
     override fun onResume() {

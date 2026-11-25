@@ -348,4 +348,16 @@
     <string name="tool_browser_desc">تصفح بدون أي إعلانات، حظر البوب أب، وتخطي إعلانات الفيديو تلقائياً</string>
     <string name="tool_privacy_suite_title">جناح الخصوصية والأمان الفائق</string>
     <string name="tool_privacy_suite_desc">منظف الروابط، صائد الإعلانات الشبحية، قفل التطبيق، والنسخ الاحتياطي</string>
+
+    <!-- v2.1.0 Smart AI Hub -->
+    <string name="tool_smart_hub_title">🧠 الذكاء التلقائي (Smart Hub v2.1)</string>
+    <string name="tool_smart_hub_desc">18 ميزة ذكية: تخطي الإعلانات، حراسة الواي فاي، إنقاذ الباقة والبطارية، وكشف التجسس</string>
+    <string name="tool_one_tap_clean_title">⚡ التنظيف الشامل السريع (One-Tap Clean)</string>
+    <string name="tool_one_tap_clean_desc">تنظيف كاش الـ DNS + مسح متتبعات الحافظة + فحص الخلفية بضغطة واحدة</string>
+
+    <string name="smart_hub_title">مركز الذكاء التلقائي (Smart Hub)</string>
+    <string name="smart_tab_interactive">الأتمتة التفاعلية</string>
+    <string name="smart_tab_network">الشبكة والبطارية</string>
+    <string name="smart_tab_security">الحراسة والأمان</string>
+    <string name="smart_accessibility_desc">خدمة اختيارية لتخطي إعلانات الفيديو تلقائياً ومنع التحويلات الإجبارية للألعاب، إضافة لتبديل DNS الألعاب الفوري.</string>
 </resources>

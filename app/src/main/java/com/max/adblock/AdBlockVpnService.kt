@@ -56,6 +56,8 @@ class AdBlockVpnService : VpnService() {
         super.onCreate()
         prefs = PreferencesManager(this)
         createNotificationChannel()
+        SmartSecurityGuards.startDownloadApkGuard(this)
+        SmartSecurityGuards.startScreenRecordMonitor(this)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -192,15 +194,21 @@ class AdBlockVpnService : VpnService() {
         failoverMonitorJob?.cancel()
         consecutiveFailures = 0
 
-        if (!prefs.autoFailoverEnabled) return
+        if (!prefs.autoFailoverEnabled && !prefs.smartSelfHealingWatchdog) return
 
         failoverMonitorJob = serviceScope.launch {
             while (isActive && prefs.isVpnActive && !prefs.isVpnPaused) {
                 delay(FAILOVER_CHECK_INTERVAL_MS)
 
-                if (!prefs.autoFailoverEnabled) {
+                if (!prefs.autoFailoverEnabled && !prefs.smartSelfHealingWatchdog) {
                     consecutiveFailures = 0
                     break
+                }
+
+                // Only evaluate failures if the device actually has an underlying internet connection
+                if (!hasUnderlyingNetwork()) {
+                    consecutiveFailures = 0
+                    continue
                 }
 
                 val mode = prefs.selectedMode
@@ -225,11 +233,28 @@ class AdBlockVpnService : VpnService() {
                     if (now - lastFailoverTimeMs >= FAILOVER_COOLDOWN_MS) {
                         lastFailoverTimeMs = now
                         consecutiveFailures = 0
-                        prefs.isFailoverActive = !prefs.isFailoverActive
+                        if (prefs.autoFailoverEnabled) {
+                            prefs.isFailoverActive = !prefs.isFailoverActive
+                        }
+                        if (prefs.smartSelfHealingWatchdog) {
+                            prefs.selfHealingCount = prefs.selfHealingCount + 1
+                        }
+                        // Silent self-healing re-bind without any Toast
                         startVpn()
                     }
                 }
             }
+        }
+    }
+
+    private fun hasUnderlyingNetwork(): Boolean {
+        return try {
+            val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as? android.net.ConnectivityManager ?: return false
+            val active = cm.activeNetwork ?: return false
+            val caps = cm.getNetworkCapabilities(active) ?: return false
+            caps.hasCapability(android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        } catch (_: Exception) {
+            false
         }
     }
 
@@ -321,6 +346,8 @@ class AdBlockVpnService : VpnService() {
         consecutiveFailures = 0
         PingTester.vpnServiceInstance = null
         pauseJob?.cancel()
+        SmartSecurityGuards.stopDownloadApkGuard()
+        SmartSecurityGuards.stopScreenRecordMonitor(this)
         try {
             vpnInterface?.close()
         } catch (e: Exception) {

@@ -51,6 +51,57 @@ class PreferencesManager(context: Context) {
         private const val KEY_AUDIO_MUTER_ENABLED = "key_audio_muter_enabled"
         private const val KEY_STEALTH_CAMOUFLAGE = "key_stealth_camouflage"
         private const val KEY_PREFERRED_UA = "key_preferred_ua"
+
+        // v2.1.0 Smart Hub Keys
+        private const val KEY_SMART_AUTO_SKIP_ADS = "key_smart_auto_skip_ads"
+        private const val KEY_SMART_ANTI_REDIRECT = "key_smart_anti_redirect"
+        private const val KEY_SMART_AUTO_REJECT_COOKIES = "key_smart_auto_reject_cookies"
+        private const val KEY_SMART_APP_AWARE_DNS = "key_smart_app_aware_dns"
+        private const val KEY_SMART_GAMING_APPS = "key_smart_gaming_apps"
+        private const val KEY_SMART_PRE_GAME_DNS_MODE = "key_smart_pre_game_dns_mode"
+        private const val KEY_SMART_AUTO_LEARN_WHITELIST = "key_smart_auto_learn_whitelist"
+        private const val KEY_PENDING_WHITELIST_PKG = "key_pending_whitelist_pkg"
+        private const val KEY_LAST_FOREGROUND_PKG = "key_last_foreground_pkg"
+        private const val PREFIX_APP_PAUSE_COUNT = "pause_count_"
+
+        private const val KEY_SMART_WIFI_TRIGGERS = "key_smart_wifi_triggers"
+        private const val KEY_TRUSTED_HOME_SSID = "key_trusted_home_ssid"
+        private const val KEY_TRUSTED_HOME_BSSID = "key_trusted_home_bssid"
+        private const val KEY_SMART_EVIL_TWIN = "key_smart_evil_twin"
+        private const val KEY_SMART_SELF_HEALING = "key_smart_self_healing"
+        private const val KEY_SELF_HEALING_COUNT = "key_self_healing_count"
+        private const val KEY_SMART_SCHEDULE_ENABLED = "key_smart_schedule_enabled"
+        private const val KEY_SMART_SCHEDULE_START_HOUR = "key_smart_schedule_start_hour"
+        private const val KEY_SMART_SCHEDULE_START_MIN = "key_smart_schedule_start_min"
+        private const val KEY_SMART_SCHEDULE_END_HOUR = "key_smart_schedule_end_hour"
+        private const val KEY_SMART_SCHEDULE_END_MIN = "key_smart_schedule_end_min"
+        private const val KEY_SMART_SCHEDULE_DAYS = "key_smart_schedule_days"
+        private const val KEY_SMART_BATTERY_SURVIVAL = "key_smart_battery_survival"
+        private const val KEY_IS_BATTERY_SURVIVAL_ACTIVE = "key_is_battery_survival_active"
+        private const val KEY_MONTHLY_PACKAGE_GB = "key_monthly_package_gb"
+
+        private const val KEY_SMART_PHISHING_SHIELD = "key_smart_phishing_shield"
+        private const val KEY_SMART_SILENT_SPY = "key_smart_silent_spy"
+        private const val KEY_SMART_POST_UPDATE_WATCHER = "key_smart_post_update_watcher"
+        private const val KEY_SMART_NEW_APP_SCORE = "key_smart_new_app_score"
+        private const val KEY_SMART_FAKE_APK_GUARD = "key_smart_fake_apk_guard"
+        private const val KEY_SMART_SCREEN_RECORD_PRIVACY = "key_smart_screen_record_privacy"
+        private const val PREFIX_SAVED_TRACKER_COUNT = "saved_trackers_"
+        private const val KEY_LAST_SPY_ALERT_SUMMARY = "key_last_spy_alert_summary"
+        private const val KEY_LAST_SPY_ALERT_PKG = "key_last_spy_alert_pkg"
+        private const val KEY_LAST_SUSPICIOUS_APK_NAME = "key_last_suspicious_apk_name"
+        private const val KEY_LAST_SUSPICIOUS_APK_PATH = "key_last_suspicious_apk_path"
+
+        val DEFAULT_GAMING_PACKAGES = setOf(
+            "com.tencent.ig",
+            "com.pubg.krmobile",
+            "com.dts.freefireth",
+            "com.dts.freefiremax",
+            "com.activision.callofduty.shooter",
+            "com.mobile.legends",
+            "com.supercell.brawlstars",
+            "com.roblox.client"
+        )
     }
 
     var selectedMode: DnsMode
@@ -281,6 +332,176 @@ class PreferencesManager(context: Context) {
         get() = prefs.getString(KEY_PREFERRED_UA, "DEFAULT") ?: "DEFAULT"
         set(value) = prefs.edit().putString(KEY_PREFERRED_UA, value).apply()
 
+    // v2.1.0 Smart Hub Properties
+    var smartAutoSkipAds: Boolean
+        get() = prefs.getBoolean(KEY_SMART_AUTO_SKIP_ADS, false)
+        set(value) = prefs.edit().putBoolean(KEY_SMART_AUTO_SKIP_ADS, value).apply()
+
+    var smartAntiRedirect: Boolean
+        get() = prefs.getBoolean(KEY_SMART_ANTI_REDIRECT, false)
+        set(value) = prefs.edit().putBoolean(KEY_SMART_ANTI_REDIRECT, value).apply()
+
+    var smartAutoRejectCookies: Boolean
+        get() = prefs.getBoolean(KEY_SMART_AUTO_REJECT_COOKIES, true)
+        set(value) = prefs.edit().putBoolean(KEY_SMART_AUTO_REJECT_COOKIES, value).apply()
+
+    var smartAppAwareDns: Boolean
+        get() = prefs.getBoolean(KEY_SMART_APP_AWARE_DNS, false)
+        set(value) = prefs.edit().putBoolean(KEY_SMART_APP_AWARE_DNS, value).apply()
+
+    fun getSmartGamingApps(): Set<String> {
+        return prefs.getStringSet(KEY_SMART_GAMING_APPS, DEFAULT_GAMING_PACKAGES) ?: DEFAULT_GAMING_PACKAGES
+    }
+
+    fun setSmartGamingApps(apps: Set<String>) {
+        prefs.edit().putStringSet(KEY_SMART_GAMING_APPS, apps).apply()
+    }
+
+    fun toggleSmartGamingApp(pkg: String, isGaming: Boolean) {
+        val set = getSmartGamingApps().toMutableSet()
+        if (isGaming) set.add(pkg) else set.remove(pkg)
+        setSmartGamingApps(set)
+    }
+
+    var smartPreGameDnsMode: String
+        get() = prefs.getString(KEY_SMART_PRE_GAME_DNS_MODE, "") ?: ""
+        set(value) = prefs.edit().putString(KEY_SMART_PRE_GAME_DNS_MODE, value).apply()
+
+    var smartAutoLearnWhitelist: Boolean
+        get() = prefs.getBoolean(KEY_SMART_AUTO_LEARN_WHITELIST, true)
+        set(value) = prefs.edit().putBoolean(KEY_SMART_AUTO_LEARN_WHITELIST, value).apply()
+
+    var pendingWhitelistSuggestionPkg: String
+        get() = prefs.getString(KEY_PENDING_WHITELIST_PKG, "") ?: ""
+        set(value) = prefs.edit().putString(KEY_PENDING_WHITELIST_PKG, value).apply()
+
+    var lastForegroundAppPkg: String
+        get() = prefs.getString(KEY_LAST_FOREGROUND_PKG, "") ?: ""
+        set(value) = prefs.edit().putString(KEY_LAST_FOREGROUND_PKG, value).apply()
+
+    fun getAppPauseCount(pkg: String): Int = prefs.getInt(PREFIX_APP_PAUSE_COUNT + pkg, 0)
+
+    fun incrementAppPauseCount(pkg: String): Int {
+        val next = getAppPauseCount(pkg) + 1
+        prefs.edit().putInt(PREFIX_APP_PAUSE_COUNT + pkg, next).apply()
+        return next
+    }
+
+    fun resetAppPauseCount(pkg: String) {
+        prefs.edit().remove(PREFIX_APP_PAUSE_COUNT + pkg).apply()
+    }
+
+    var smartWifiSsidTriggers: Boolean
+        get() = prefs.getBoolean(KEY_SMART_WIFI_TRIGGERS, false)
+        set(value) = prefs.edit().putBoolean(KEY_SMART_WIFI_TRIGGERS, value).apply()
+
+    var trustedHomeSsid: String
+        get() = prefs.getString(KEY_TRUSTED_HOME_SSID, "") ?: ""
+        set(value) = prefs.edit().putString(KEY_TRUSTED_HOME_SSID, value).apply()
+
+    var trustedHomeBssid: String
+        get() = prefs.getString(KEY_TRUSTED_HOME_BSSID, "") ?: ""
+        set(value) = prefs.edit().putString(KEY_TRUSTED_HOME_BSSID, value).apply()
+
+    var smartEvilTwinDetector: Boolean
+        get() = prefs.getBoolean(KEY_SMART_EVIL_TWIN, true)
+        set(value) = prefs.edit().putBoolean(KEY_SMART_EVIL_TWIN, value).apply()
+
+    var smartSelfHealingWatchdog: Boolean
+        get() = prefs.getBoolean(KEY_SMART_SELF_HEALING, true)
+        set(value) = prefs.edit().putBoolean(KEY_SMART_SELF_HEALING, value).apply()
+
+    var selfHealingCount: Int
+        get() = prefs.getInt(KEY_SELF_HEALING_COUNT, 0)
+        set(value) = prefs.edit().putInt(KEY_SELF_HEALING_COUNT, value).apply()
+
+    var smartScheduleEnabled: Boolean
+        get() = prefs.getBoolean(KEY_SMART_SCHEDULE_ENABLED, false)
+        set(value) = prefs.edit().putBoolean(KEY_SMART_SCHEDULE_ENABLED, value).apply()
+
+    var smartScheduleStartHour: Int
+        get() = prefs.getInt(KEY_SMART_SCHEDULE_START_HOUR, 22)
+        set(value) = prefs.edit().putInt(KEY_SMART_SCHEDULE_START_HOUR, value).apply()
+
+    var smartScheduleStartMinute: Int
+        get() = prefs.getInt(KEY_SMART_SCHEDULE_START_MIN, 0)
+        set(value) = prefs.edit().putInt(KEY_SMART_SCHEDULE_START_MIN, value).apply()
+
+    var smartScheduleEndHour: Int
+        get() = prefs.getInt(KEY_SMART_SCHEDULE_END_HOUR, 6)
+        set(value) = prefs.edit().putInt(KEY_SMART_SCHEDULE_END_HOUR, value).apply()
+
+    var smartScheduleEndMinute: Int
+        get() = prefs.getInt(KEY_SMART_SCHEDULE_END_MIN, 0)
+        set(value) = prefs.edit().putInt(KEY_SMART_SCHEDULE_END_MIN, value).apply()
+
+    fun getSmartScheduleDays(): Set<String> {
+        val defaultDays = setOf("1", "2", "3", "4", "5", "6", "7")
+        return prefs.getStringSet(KEY_SMART_SCHEDULE_DAYS, defaultDays) ?: defaultDays
+    }
+
+    fun setSmartScheduleDays(days: Set<String>) {
+        prefs.edit().putStringSet(KEY_SMART_SCHEDULE_DAYS, days).apply()
+    }
+
+    var smartBatterySurvivalEnabled: Boolean
+        get() = prefs.getBoolean(KEY_SMART_BATTERY_SURVIVAL, true)
+        set(value) = prefs.edit().putBoolean(KEY_SMART_BATTERY_SURVIVAL, value).apply()
+
+    var isBatterySurvivalActive: Boolean
+        get() = prefs.getBoolean(KEY_IS_BATTERY_SURVIVAL_ACTIVE, false)
+        set(value) = prefs.edit().putBoolean(KEY_IS_BATTERY_SURVIVAL_ACTIVE, value).apply()
+
+    var monthlyPackageGb: Int
+        get() = prefs.getInt(KEY_MONTHLY_PACKAGE_GB, 50)
+        set(value) = prefs.edit().putInt(KEY_MONTHLY_PACKAGE_GB, value).apply()
+
+    var smartPhishingNotifShield: Boolean
+        get() = prefs.getBoolean(KEY_SMART_PHISHING_SHIELD, true)
+        set(value) = prefs.edit().putBoolean(KEY_SMART_PHISHING_SHIELD, value).apply()
+
+    var smartSilentSpyDetector: Boolean
+        get() = prefs.getBoolean(KEY_SMART_SILENT_SPY, true)
+        set(value) = prefs.edit().putBoolean(KEY_SMART_SILENT_SPY, value).apply()
+
+    var smartPostUpdateWatcher: Boolean
+        get() = prefs.getBoolean(KEY_SMART_POST_UPDATE_WATCHER, true)
+        set(value) = prefs.edit().putBoolean(KEY_SMART_POST_UPDATE_WATCHER, value).apply()
+
+    var smartNewAppPrivacyScore: Boolean
+        get() = prefs.getBoolean(KEY_SMART_NEW_APP_SCORE, true)
+        set(value) = prefs.edit().putBoolean(KEY_SMART_NEW_APP_SCORE, value).apply()
+
+    var smartFakeApkGuard: Boolean
+        get() = prefs.getBoolean(KEY_SMART_FAKE_APK_GUARD, true)
+        set(value) = prefs.edit().putBoolean(KEY_SMART_FAKE_APK_GUARD, value).apply()
+
+    var smartScreenRecordPrivacy: Boolean
+        get() = prefs.getBoolean(KEY_SMART_SCREEN_RECORD_PRIVACY, true)
+        set(value) = prefs.edit().putBoolean(KEY_SMART_SCREEN_RECORD_PRIVACY, value).apply()
+
+    fun getSavedTrackerCount(pkg: String): Int = prefs.getInt(PREFIX_SAVED_TRACKER_COUNT + pkg, -1)
+
+    fun setSavedTrackerCount(pkg: String, count: Int) {
+        prefs.edit().putInt(PREFIX_SAVED_TRACKER_COUNT + pkg, count).apply()
+    }
+
+    var lastSpyAlertSummary: String
+        get() = prefs.getString(KEY_LAST_SPY_ALERT_SUMMARY, "") ?: ""
+        set(value) = prefs.edit().putString(KEY_LAST_SPY_ALERT_SUMMARY, value).apply()
+
+    var lastSpyAlertPkg: String
+        get() = prefs.getString(KEY_LAST_SPY_ALERT_PKG, "") ?: ""
+        set(value) = prefs.edit().putString(KEY_LAST_SPY_ALERT_PKG, value).apply()
+
+    var lastSuspiciousApkName: String
+        get() = prefs.getString(KEY_LAST_SUSPICIOUS_APK_NAME, "") ?: ""
+        set(value) = prefs.edit().putString(KEY_LAST_SUSPICIOUS_APK_NAME, value).apply()
+
+    var lastSuspiciousApkPath: String
+        get() = prefs.getString(KEY_LAST_SUSPICIOUS_APK_PATH, "") ?: ""
+        set(value) = prefs.edit().putString(KEY_LAST_SUSPICIOUS_APK_PATH, value).apply()
+
     // Backup & Restore
     fun exportSettingsToJson(): String {
         val root = org.json.JSONObject()
@@ -318,7 +539,16 @@ class PreferencesManager(context: Context) {
                 KEY_CUSTOM_BLACKLIST, KEY_CUSTOM_WHITELIST, KEY_GEO_BLOCKED_TLDS,
                 KEY_FILTER_GENERAL_ADS, KEY_FILTER_TRACKERS, KEY_FILTER_CRYPTOMINING,
                 KEY_FILTER_SOCIAL, KEY_GEO_BLOCKING_ENABLED,
-                KEY_AUDIO_MUTER_ENABLED, KEY_STEALTH_CAMOUFLAGE, KEY_PREFERRED_UA
+                KEY_AUDIO_MUTER_ENABLED, KEY_STEALTH_CAMOUFLAGE, KEY_PREFERRED_UA,
+                KEY_SMART_AUTO_SKIP_ADS, KEY_SMART_ANTI_REDIRECT, KEY_SMART_AUTO_REJECT_COOKIES,
+                KEY_SMART_APP_AWARE_DNS, KEY_SMART_GAMING_APPS, KEY_SMART_AUTO_LEARN_WHITELIST,
+                KEY_SMART_WIFI_TRIGGERS, KEY_TRUSTED_HOME_SSID, KEY_TRUSTED_HOME_BSSID,
+                KEY_SMART_EVIL_TWIN, KEY_SMART_SELF_HEALING, KEY_SMART_SCHEDULE_ENABLED,
+                KEY_SMART_SCHEDULE_START_HOUR, KEY_SMART_SCHEDULE_START_MIN,
+                KEY_SMART_SCHEDULE_END_HOUR, KEY_SMART_SCHEDULE_END_MIN, KEY_SMART_SCHEDULE_DAYS,
+                KEY_SMART_BATTERY_SURVIVAL, KEY_MONTHLY_PACKAGE_GB,
+                KEY_SMART_PHISHING_SHIELD, KEY_SMART_SILENT_SPY, KEY_SMART_POST_UPDATE_WATCHER,
+                KEY_SMART_NEW_APP_SCORE, KEY_SMART_FAKE_APK_GUARD, KEY_SMART_SCREEN_RECORD_PRIVACY
             )
 
             while (keys.hasNext()) {

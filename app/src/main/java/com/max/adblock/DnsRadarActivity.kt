@@ -64,6 +64,26 @@ class DnsRadarActivity : AppCompatActivity() {
         setupFiltersTab()
         setupAnalyticsTab()
         setupRouterTab()
+        observeScreenRecordingPrivacy()
+    }
+
+    private fun observeScreenRecordingPrivacy() {
+        lifecycleScope.launch {
+            SmartSecurityGuards.isScreenRecordingActive.collectLatest { recording ->
+                if (recording) {
+                    window.setFlags(
+                        android.view.WindowManager.LayoutParams.FLAG_SECURE,
+                        android.view.WindowManager.LayoutParams.FLAG_SECURE
+                    )
+                    binding.rvRadarLogs.visibility = View.INVISIBLE
+                    binding.tvRadarLiveStatus.text = "🎥 تم إخفاء سجلات الـ DNS مؤقتاً لحماية خصوصيتك أثناء التصوير"
+                } else {
+                    window.clearFlags(android.view.WindowManager.LayoutParams.FLAG_SECURE)
+                    binding.rvRadarLogs.visibility = View.VISIBLE
+                    binding.tvRadarLiveStatus.text = getString(R.string.radar_status_streaming)
+                }
+            }
+        }
     }
 
     private fun setupToolbar() {
